@@ -11,7 +11,7 @@ namespace ServiceSchedulerTests
 			
 		}
 
-		public void AddTodayTimes(IList<string> recurrentTimeCollection)
+		new public void AddTodayTimes(IList<string> recurrentTimeCollection)
 		{
 			base.AddTodayTimes(recurrentTimeCollection);
 		}

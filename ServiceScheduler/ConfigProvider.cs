@@ -9,12 +9,14 @@ namespace ServiceScheduler
 		protected List<string> _recurrentTimes;
 		protected List<string> _onceTimes;
 		protected IDataProvider _dataProvider;
-
 		protected Func<DateTime> _dateTimeNow;
 
 		public ConfigProvider (IDataProvider dataProvider)
 		{
 			_dataProvider = dataProvider;
+			_executionTimes = new List<DateTime> ();
+			_recurrentTimes = new List<string> ();
+			_onceTimes = new List<string> ();
 			_dateTimeNow = () => DateTime.Now;
 		}
 
