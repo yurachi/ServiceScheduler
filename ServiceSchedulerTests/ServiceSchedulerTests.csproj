@@ -3,26 +3,21 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{19B03C8A-EF9D-46FB-AF91-3CDC05498B2F}</ProjectGuid>
+    <ProjectGuid>{B5A198EC-55BB-406D-BB03-E116430F559A}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>ServiceScheduler</RootNamespace>
-    <AssemblyName>ServiceScheduler</AssemblyName>
+    <RootNamespace>ServiceSchedulerTests</RootNamespace>
+    <AssemblyName>ServiceSchedulerTests</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <CustomCommands>
-      <CustomCommands>
-        <Command type="Execute" />
-      </CustomCommands>
-    </CustomCommands>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -33,26 +28,35 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServiceCaller.cs" />
-    <Compile Include="ConfigProvider.cs" />
-    <Compile Include="IConfigProvider.cs" />
-    <Compile Include="IDataProvider.cs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
+    <Reference Include="System" />
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="AutoMapper">
-      <HintPath>..\packages\AutoMapper.4.0.4\lib\net45\AutoMapper.dll</HintPath>
+    <Reference Include="nunit.mocks">
+      <HintPath>..\packages\NUnit.Mocks.2.6.4\lib\nunit.mocks.dll</HintPath>
     </Reference>
-    <Reference Include="mscorlib" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="NSubstitute">
+      <HintPath>..\packages\NSubstitute.1.8.2.0\lib\net45\NSubstitute.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigProviderTests\AddTodayTimesTest.cs" />
+    <Compile Include="wrappers\ConfigProviderWrapper.cs" />
+    <Compile Include="mocks\DataProviderMockFactory.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="wrappers\" />
+    <Folder Include="ConfigProviderTests\" />
+    <Folder Include="mocks\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ServiceScheduler\ServiceScheduler.csproj">
+      <Project>{19B03C8A-EF9D-46FB-AF91-3CDC05498B2F}</Project>
+      <Name>ServiceScheduler</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

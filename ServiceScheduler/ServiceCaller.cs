@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Threading;
 
 namespace ServiceScheduler
 {
 	public class ServiceCaller
 	{
 		protected Action _doWork;
-		protected Timer _timer;
 		protected IConfigProvider _configProvider;
 
 		public ServiceCaller (IConfigProvider configProvider)
@@ -18,13 +18,13 @@ namespace ServiceScheduler
 			_doWork = doWork;
 			while(true)
 			{
-				if ((_configProvider.GetNextExecutionTime () - DateTime.Now) < _configProvider.GetMinimalTimerInterval ()) 
+				if ((_configProvider.GetNextExecutionTime () - DateTime.Now) < _configProvider.GetMinimalTimeInterval ()) 
 				{
 					_doWork ();//TODO:background thread?
 				}
 				else
 				{
-					_timer.Sleep (_configProvider.GetMinimalSleepInterval ());
+					Thread.Sleep(_configProvider.GetMinimalSleepInterval ().Milliseconds);
 				}
 			}
 		}

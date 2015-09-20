@@ -1,24 +1,43 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ServiceScheduler
 {
-	public class ConfigProvider
+	public class ConfigProvider : IConfigProvider
 	{
-		protected IList<DateTime> _executionTimes;
+		protected List<DateTime> _executionTimes;
+		protected List<string> _recurrentTimes;
+		protected List<string> _onceTimes;
+		protected IDataProvider _dataProvider;
 
-		public ConfigProvider ()
+		protected Func<DateTime> _dateTimeNow;
+
+		public ConfigProvider (IDataProvider dataProvider)
 		{
+			_dataProvider = dataProvider;
+			_dateTimeNow = () => DateTime.Now;
 		}
 
 		public void Setup()
 		{
 			Pause ();
-			_executionTimes.Clean ();
-			var recurrentTimes = _dataProvider.GetRecurrentTimes ();
-			AddTodayTimes (recurrentTimes);
-			AddTomorrowTimes (recurrentTimes);
-			AddOnceTimes (_dataProvider.GetOnceTimes ());
+			_executionTimes.Clear ();
+			_recurrentTimes.Clear ();
+			_recurrentTimes.AddRange(_dataProvider.GetRecurrentTimes ());
+			AddTodayTimes (_recurrentTimes);
+			AddTomorrowTimes (_recurrentTimes);
+			_onceTimes.Clear ();
+			_onceTimes.AddRange(_dataProvider.GetOnceTimes ());
+			AddOnceTimes (_onceTimes);
 			Resume ();
+		}
+
+		protected void Pause()
+		{
+		}
+
+		protected void Resume()
+		{
 		}
 
 		protected void AddTodayTimes(IList<string> recurrentTimeCollection)
@@ -38,18 +57,20 @@ namespace ServiceScheduler
 		{
 			//TODO: wait if Pause
 			//TODO: find nearest execution time in the collection
+			return _dateTimeNow();
 		}
 
-		public Interval GetMinimalTimerInterval()
+		public TimeSpan GetMinimalTimeInterval()
 		{
 			//TODO: wait if Pause
-
+			return new TimeSpan();
 		}
 
-		public Interval GetMinimalSleepInterval()
+		public TimeSpan GetMinimalSleepInterval()
 		{
 			//TODO: wait if Pause
 			//TODO: return minimal of (NextExecution - Now) and DefaultSleepInterval
+			return new TimeSpan();
 		}
 	}
 }
