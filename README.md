@@ -13,7 +13,9 @@ Examples:
 Now
 0:00:01 01-Jan
 
-Now is going to be replaced by concrete execution time and stored back in database, unless marked with Once.
-Entries ending with Once are going to be removed on execution. 
+"Now" is going to be replaced by concrete execution time and stored back in database, unless marked with "Once".
+Entries ending with "Once" are going to be removed on execution. 
 The Year is assumed current / next. The day is assumed current / next.
+
+The configurator allows for a small tolerance in missing the exact execution time. All the execution is happening in the background threads, so the consumers of the timer are expected to be thread-safe.
 
