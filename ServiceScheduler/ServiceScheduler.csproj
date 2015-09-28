@@ -35,9 +35,12 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceCaller.cs" />
-    <Compile Include="ConfigProvider.cs" />
-    <Compile Include="IConfigProvider.cs" />
-    <Compile Include="IDataProvider.cs" />
+    <Compile Include="converters\TimeStringConverter.cs" />
+    <Compile Include="providers\ConfigProvider.cs" />
+    <Compile Include="interfaces\IConfigProvider.cs" />
+    <Compile Include="interfaces\IDataProvider.cs" />
+    <Compile Include="datamodels\ExecutionDateTime.cs" />
+    <Compile Include="interfaces\ITimeStringConverter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -54,5 +57,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="New Folder\" />
+    <Folder Include="datamodels\" />
   </ItemGroup>
 </Project>

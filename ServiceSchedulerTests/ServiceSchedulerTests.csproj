@@ -43,6 +43,9 @@
     <Compile Include="ConfigProviderTests\AddTodayTimesTest.cs" />
     <Compile Include="wrappers\ConfigProviderWrapper.cs" />
     <Compile Include="mocks\DataProviderMockFactory.cs" />
+    <Compile Include="TimeStringConverterTests\ConvertTest.cs" />
+    <Compile Include="TimeStringConverterTests\ParseDateTimeTest.cs" />
+    <Compile Include="wrappers\TimeStringConverterWrapper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -52,6 +55,7 @@
     <Folder Include="wrappers\" />
     <Folder Include="ConfigProviderTests\" />
     <Folder Include="mocks\" />
+    <Folder Include="New Folder\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ServiceScheduler\ServiceScheduler.csproj">
