@@ -8,7 +8,7 @@ namespace ServiceSchedulerTests
 	{
 		new public DateTime ParseDateTime(params string[] timeString)
 		{
-			return base.ParseDateTime (timeStrings);
+			return base.ParseDateTime (timeString);
 		}
 
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -40,23 +40,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConfigProviderTests\AddTodayTimesTest.cs" />
+    <Compile Include="helpers\Assert.cs" />
+    <Compile Include="tests\ConfigProviderTests\AddTodayTimesTest.cs" />
     <Compile Include="wrappers\ConfigProviderWrapper.cs" />
     <Compile Include="mocks\DataProviderMockFactory.cs" />
-    <Compile Include="TimeStringConverterTests\ConvertTest.cs" />
-    <Compile Include="TimeStringConverterTests\ParseDateTimeTest.cs" />
+    <Compile Include="tests\TimeStringConverterTests\ConvertTest.cs" />
+    <Compile Include="tests\TimeStringConverterTests\ParseDateTimeTest.cs" />
     <Compile Include="wrappers\TimeStringConverterWrapper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="wrappers\" />
-    <Folder Include="ConfigProviderTests\" />
-    <Folder Include="mocks\" />
-    <Folder Include="New Folder\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\ServiceScheduler\ServiceScheduler.csproj">
       <Project>{19B03C8A-EF9D-46FB-AF91-3CDC05498B2F}</Project>

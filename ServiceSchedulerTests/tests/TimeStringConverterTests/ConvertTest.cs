@@ -1,11 +1,9 @@
 using System;
-using System.Text;
 using NUnit.Framework;
-using ServiceScheduler;
 
 namespace ServiceSchedulerTests
 {
-	[TestFixture]
+    [TestFixture]
 	public class ConvertTest
 	{
 		private TimeStringConverterWrapper objectUnderTest;
@@ -23,7 +21,7 @@ namespace ServiceSchedulerTests
 
 			var actual = objectUnderTest.Convert (time, 0, new TimeSpan());
 
-			Assert.IsEmpty(AssertExecutionDateTime(expectedHour, expectedMinute, expectedDay,expectedMonth, expectedYear, expectedNow, expectedOnce, actual));
+            helpers.Assert.ExecutionDateTimeMatch(expectedHour, expectedMinute, expectedDay,expectedMonth, expectedYear, expectedNow, expectedOnce, actual);
 		}
 
 		[TestCase (1, 1, 16, 9, 2015, false, false, "01:01")]
@@ -39,10 +37,10 @@ namespace ServiceSchedulerTests
 
 			var actual = objectUnderTest.Convert (time, 1, new TimeSpan());
 
-			Assert.IsEmpty(AssertExecutionDateTime(expectedHour, expectedMinute, expectedDay,expectedMonth, expectedYear, expectedNow, expectedOnce, actual));
+            helpers.Assert.ExecutionDateTimeMatch(expectedHour, expectedMinute, expectedDay,expectedMonth, expectedYear, expectedNow, expectedOnce, actual);
 		}
 
-		[TestCase (1, 1, 15, 9, 2015, false, false, "01:01")]
+        [TestCase (1, 1, 15, 9, 2015, false, false, "01:01")]
 		[TestCase (9, 25, 15, 9, 2015, true, false, "now")]
 		[TestCase (9, 25, 15, 9, 2015, true, true, "now once")]
 		public void ConversionToleranceValidTodayTime (int expectedHour, int expectedMinute, int expectedDay, int expectedMonth, int expectedYear, bool expectedNow, bool expectedOnce, string time)
@@ -52,7 +50,7 @@ namespace ServiceSchedulerTests
 
 			var actual = objectUnderTest.Convert (time, 0, new TimeSpan(0, 1, 0));
 
-			Assert.IsEmpty(AssertExecutionDateTime(expectedHour, expectedMinute, expectedDay,expectedMonth, expectedYear, expectedNow, expectedOnce, actual));
+            helpers.Assert.ExecutionDateTimeMatch(expectedHour, expectedMinute, expectedDay,expectedMonth, expectedYear, expectedNow, expectedOnce, actual);
 		}
 
 		[TestCase (1, 1, 15, 9, 2015, false, false, "01:61")]
@@ -69,7 +67,7 @@ namespace ServiceSchedulerTests
 
 			var actual = objectUnderTest.Convert (time, 0, new TimeSpan());
 
-			Assert.IsEmpty(AssertExecutionDateTime(expectedHour, expectedMinute, expectedDay, expectedMonth, expectedYear, expectedNow, expectedOnce, actual));
+            helpers.Assert.ExecutionDateTimeMatch(expectedHour, expectedMinute, expectedDay, expectedMonth, expectedYear, expectedNow, expectedOnce, actual);
 		}
 
 	}

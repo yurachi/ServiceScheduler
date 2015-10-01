@@ -22,7 +22,7 @@ namespace ServiceSchedulerTests
 
 			var actual = objectUnderTest.Convert (time, 0, new TimeSpan());
 
-			Assert.IsEmpty(AssertExecutionDateTime(expectedHour, expectedMinute, expectedDay,expectedMonth, expectedYear, expectedNow, expectedOnce, actual));
+            helpers.Assert.ExecutionDateTimeMatch(expectedHour, expectedMinute, expectedDay,expectedMonth, expectedYear, expectedNow, expectedOnce, actual);
 		}
 
 	}
