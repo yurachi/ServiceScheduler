@@ -10,9 +10,10 @@ namespace ServiceScheduler
 		public TimeStringConverter()
 		{
 			_dateTimeNow = () => DateTime.Now;
+            Tolerance = new TimeSpan(0, 1, 0);
 		}
 
-		public ExecutionDateTime Convert(string timeString, int addedDays, TimeSpan tolerance)
+		public ExecutionDateTime Convert(string timeString, int addedDays)
 		{
 			var timeTokens = timeString.Split (' ');
 			var recognisedCount = 0;
@@ -51,7 +52,7 @@ namespace ServiceScheduler
 			{
 				IsOnce = isOnce,
 				IsNow = isNow,
-				ScheduledTime = isNow ? parsedDateTime.AddDays (addedDays).Add(tolerance) : parsedDateTime.Date.AddDays (addedDays),
+				ScheduledTime = isNow ? parsedDateTime.AddDays (addedDays).Add(Tolerance) : parsedDateTime.Date.AddDays (addedDays),
 			};
 			return date;
 		}
@@ -59,7 +60,9 @@ namespace ServiceScheduler
 		protected DateTime ParseDateTime(params string[] timeString)
 		{
 			return _dateTimeNow ();
-		}
-	}
+        }
+
+        public TimeSpan Tolerance { protected get; set; }
+    }
 }
 

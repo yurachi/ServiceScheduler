@@ -9,22 +9,35 @@ namespace ServiceSchedulerTests
 	{
 		private TimeStringConverterWrapper objectUnderTest;
 
-		[TestCase (1, 1, 15, 9, 2015, false, false, "01:01")]
-		[TestCase (1, 1, 15, 9, 2015, false, true, "01:01 once")]
-		[TestCase (1, 1, 1, 1, 2015, false, false, "01:01 01-Jan")] 
-		[TestCase (1, 1, 15, 10, 2016, false, false, "01:01 15-Oct-2016")]
-		[TestCase (9, 24, 15, 9, 2015, true, false, "now")]
-		[TestCase (9, 24, 15, 9, 2015, true, true, "now once")]
-		public void ConvertValidTodayTime (int expectedHour, int expectedMinute, int expectedDay, int expectedMonth, int expectedYear, bool expectedNow, bool expectedOnce, string time)
+		[TestCase (0, 0, 16, 9, 2015, "0:0")]
+        [TestCase(8, 45, 16, 9, 2015, "08:45")]
+        [TestCase(9, 23, 16, 9, 2015, "09:23")]
+        [TestCase(9, 24, 15, 9, 2015, "09:24")]
+        [TestCase(23, 59, 15, 9, 2015, "23:59")]
+        public void ParseValidTime (int expectedHour, int expectedMinute, int expectedDay, int expectedMonth, int expectedYear, string dateTime)
 		{
 			objectUnderTest = new TimeStringConverterWrapper ();
 			objectUnderTest.Now = new DateTime (2015, 9, 15, 9, 24, 31);
+            var expected = new DateTime(expectedYear, expectedMonth, expectedDay, expectedHour, expectedMinute, 31);
 
-			var actual = objectUnderTest.Convert (time, 0, new TimeSpan());
+			var actual = objectUnderTest.ParseDateTime (dateTime);
 
-            helpers.Assert.ExecutionDateTimeMatch(expectedHour, expectedMinute, expectedDay,expectedMonth, expectedYear, expectedNow, expectedOnce, actual);
+            Assert.AreEqual(expected, actual);
 		}
 
-	}
+        [TestCase(1, 1, 1, 1, 2016, "01:01 01-Jan")]
+        [TestCase(1, 1, 15, 10, 2017, "01:01 15-Oct-2017")]
+        [TestCase(9, 10, 15, 8, 2016, "09:10 15-Aug")]
+        public void ParseValidDateTime(int expectedHour, int expectedMinute, int expectedDay, int expectedMonth, int expectedYear, string dateTime)
+        {
+            objectUnderTest = new TimeStringConverterWrapper();
+            objectUnderTest.Now = new DateTime(2015, 9, 15, 9, 24, 31);
+            var expected = new DateTime(expectedYear, expectedMonth, expectedDay, expectedHour, expectedMinute, 31);
+
+            var actual = objectUnderTest.ParseDateTime(dateTime);
+
+            Assert.AreEqual(expected, actual);
+        }
+    }
 }
 

@@ -4,7 +4,8 @@ namespace ServiceScheduler
 {
 	public interface ITimeStringConverter
 	{
-		ExecutionDateTime Convert(string timeString, int addedDays, TimeSpan tolerance);
+        TimeSpan Tolerance { set; }
+		ExecutionDateTime Convert(string timeString, int addedDays);
 	}
 }
 

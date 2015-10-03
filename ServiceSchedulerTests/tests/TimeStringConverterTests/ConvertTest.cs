@@ -16,10 +16,14 @@ namespace ServiceSchedulerTests
 		[TestCase (9, 24, 15, 9, 2015, true, true, "now once")]
 		public void ConvertValidTodayTime (int expectedHour, int expectedMinute, int expectedDay, int expectedMonth, int expectedYear, bool expectedNow, bool expectedOnce, string time)
 		{
-			objectUnderTest = new TimeStringConverterWrapper ();
-			objectUnderTest.Now = new DateTime (2015, 9, 15, 9, 24, 31);
+            objectUnderTest = new TimeStringConverterWrapper()
+            {
+                Now = new DateTime(2015, 9, 15, 9, 24, 31),
+                Tolerance = new TimeSpan(0, 1, 0),
+            };
 
-			var actual = objectUnderTest.Convert (time, 0, new TimeSpan());
+
+            var actual = objectUnderTest.Convert (time, 0);
 
             helpers.Assert.ExecutionDateTimeMatch(expectedHour, expectedMinute, expectedDay,expectedMonth, expectedYear, expectedNow, expectedOnce, actual);
 		}
@@ -32,10 +36,13 @@ namespace ServiceSchedulerTests
 		[TestCase (9, 24, 16, 9, 2015, true, true, "now once")]
 		public void ConvertValidTomorrowTime (int expectedHour, int expectedMinute, int expectedDay, int expectedMonth, int expectedYear, bool expectedNow, bool expectedOnce, string time)
 		{
-			objectUnderTest = new TimeStringConverterWrapper ();
-			objectUnderTest.Now = new DateTime (2015, 9, 15, 9, 24, 31);
+            objectUnderTest = new TimeStringConverterWrapper()
+            {
+                Now = new DateTime(2015, 9, 15, 9, 24, 31),
+                Tolerance = new TimeSpan(0, 1, 0),
+            };
 
-			var actual = objectUnderTest.Convert (time, 1, new TimeSpan());
+            var actual = objectUnderTest.Convert (time, 1);
 
             helpers.Assert.ExecutionDateTimeMatch(expectedHour, expectedMinute, expectedDay,expectedMonth, expectedYear, expectedNow, expectedOnce, actual);
 		}
@@ -45,10 +52,13 @@ namespace ServiceSchedulerTests
 		[TestCase (9, 25, 15, 9, 2015, true, true, "now once")]
 		public void ConversionToleranceValidTodayTime (int expectedHour, int expectedMinute, int expectedDay, int expectedMonth, int expectedYear, bool expectedNow, bool expectedOnce, string time)
 		{
-			objectUnderTest = new TimeStringConverterWrapper ();
-			objectUnderTest.Now = new DateTime (2015, 9, 15, 9, 24, 31);
+            objectUnderTest = new TimeStringConverterWrapper()
+            {
+                Now = new DateTime(2015, 9, 15, 9, 24, 31),
+                Tolerance = new TimeSpan(0, 1, 0),
+            };
 
-			var actual = objectUnderTest.Convert (time, 0, new TimeSpan(0, 1, 0));
+            var actual = objectUnderTest.Convert (time, 0);
 
             helpers.Assert.ExecutionDateTimeMatch(expectedHour, expectedMinute, expectedDay,expectedMonth, expectedYear, expectedNow, expectedOnce, actual);
 		}
@@ -62,10 +72,13 @@ namespace ServiceSchedulerTests
 		[TestCase (1, 1, 15, 9, 2015, false, false, "now one")]
 		public void ConvertInvalidTime (int expectedHour, int expectedMinute, int expectedDay, int expectedMonth, int expectedYear, bool expectedNow, bool expectedOnce, string time)
 		{
-			objectUnderTest = new TimeStringConverterWrapper ();
-			objectUnderTest.Now = new DateTime (2015, 9, 15, 9, 24, 31);
+            objectUnderTest = new TimeStringConverterWrapper()
+            {
+                Now = new DateTime(2015, 9, 15, 9, 24, 31),
+                Tolerance = new TimeSpan(0,1,0),
+            };
 
-			var actual = objectUnderTest.Convert (time, 0, new TimeSpan());
+			var actual = objectUnderTest.Convert (time, 0);
 
             helpers.Assert.ExecutionDateTimeMatch(expectedHour, expectedMinute, expectedDay, expectedMonth, expectedYear, expectedNow, expectedOnce, actual);
 		}
