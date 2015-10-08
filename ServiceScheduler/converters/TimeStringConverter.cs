@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Globalization;
 
 namespace ServiceScheduler
 {
@@ -13,7 +14,7 @@ namespace ServiceScheduler
             Tolerance = new TimeSpan(0, 1, 0);
 		}
 
-		public ExecutionDateTime Convert(string timeString, int addedDays)
+		public ExecutionDateTime Convert(string timeString)
 		{
 			var timeTokens = timeString.Split (' ');
 			var recognisedCount = 0;
@@ -52,14 +53,26 @@ namespace ServiceScheduler
 			{
 				IsOnce = isOnce,
 				IsNow = isNow,
-				ScheduledTime = isNow ? parsedDateTime.AddDays (addedDays).Add(Tolerance) : parsedDateTime.Date.AddDays (addedDays),
+				ScheduledTime = isNow ? parsedDateTime.Add(Tolerance) : parsedDateTime.Date,
 			};
 			return date;
 		}
 
-		protected DateTime ParseDateTime(params string[] timeString)
+		protected DateTime ParseDateTime(params string[] timeStrings)
 		{
-			return _dateTimeNow ();
+            DateTime result;
+            if (timeStrings.Length == 1)
+            {
+                var parsedTime = DateTime.Parse(timeStrings[0], CultureInfo.CreateSpecificCulture("en-UK"), DateTimeStyles.NoCurrentDateDefault);
+                result = _dateTimeNow().Date
+                    .Add(parsedTime.TimeOfDay)
+                    .AddDays((parsedTime.TimeOfDay > _dateTimeNow().TimeOfDay.Add(Tolerance)) ? 0 : 1);
+            }
+            else
+            {
+                result = DateTime.Parse(timeStrings[1] + " " + timeStrings[0]);
+            }
+			return result;
         }
 
         public TimeSpan Tolerance { protected get; set; }
