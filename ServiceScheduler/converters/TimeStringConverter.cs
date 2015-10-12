@@ -27,6 +27,9 @@ namespace ServiceScheduler
 			if (isNow)
 				++recognisedCount;
 
+            if (isNow)
+                isOnce = true;
+
 			var parsedDateTime = _dateTimeNow ();
 			if(!isNow)
 			{
@@ -66,11 +69,14 @@ namespace ServiceScheduler
                 var parsedTime = DateTime.Parse(timeStrings[0], CultureInfo.CreateSpecificCulture("en-UK"), DateTimeStyles.NoCurrentDateDefault);
                 result = _dateTimeNow().Date
                     .Add(parsedTime.TimeOfDay)
-                    .AddDays((parsedTime.TimeOfDay > _dateTimeNow().TimeOfDay.Add(Tolerance)) ? 0 : 1);
+                    .AddDays((parsedTime.TimeOfDay.Add(Tolerance) > _dateTimeNow().TimeOfDay) ? 0 : 1);
             }
             else
             {
-                result = DateTime.Parse(timeStrings[1] + " " + timeStrings[0]);
+                var yearString = string.Empty;
+                if (timeStrings[1].Length < 6)
+                    yearString = "-" + _dateTimeNow().Year.ToString();
+                result = DateTime.Parse(timeStrings[1] + yearString + " " + timeStrings[0], CultureInfo.CreateSpecificCulture("en-UK"));
             }
 			return result;
         }
