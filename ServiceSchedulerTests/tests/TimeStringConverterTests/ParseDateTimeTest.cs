@@ -1,10 +1,9 @@
 ﻿using System;
 using NUnit.Framework;
-using ServiceScheduler;
 
 namespace ServiceSchedulerTests
 {
-	[TestFixture]
+    [TestFixture]
 	public class ParseDateTimeTest
 	{
 		private TimeStringConverterWrapper objectUnderTest;
@@ -25,10 +24,10 @@ namespace ServiceSchedulerTests
             Assert.AreEqual(expected, actual);
 		}
 
-        [TestCase(1, 1, 1, 1, 2016, "01:01", "01-Jan")]
-        [TestCase(1, 1, 15, 10, 2017, "01:01", "15-Oct-2017")]
-        [TestCase(9, 10, 15, 8, 2016, "09:10", "15-Aug")]
-        public void ParseValidTimeWithDate(int expectedHour, int expectedMinute, int expectedDay, int expectedMonth, int expectedYear, params string[] dateTime)
+        [TestCase(1, 1, 15, 9, 2015, "01:01", "Tuesday")]
+        [TestCase(1, 1, 16, 9, 2015, "01:01", "Wednesday")]
+        [TestCase(9, 10, 20, 9, 2015, "09:10", "Sunday")]
+        public void ParseValidTimeWithWeekDay(int expectedHour, int expectedMinute, int expectedDay, int expectedMonth, int expectedYear, params string[] dateTime)
         {
             objectUnderTest = new TimeStringConverterWrapper();
             objectUnderTest.Now = new DateTime(2015, 9, 15, 9, 24, 0);
