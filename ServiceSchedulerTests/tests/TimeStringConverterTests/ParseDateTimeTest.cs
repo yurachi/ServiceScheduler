@@ -24,8 +24,12 @@ namespace ServiceSchedulerTests
             Assert.AreEqual(expected, actual);
 		}
 
-        [TestCase(1, 1, 15, 9, 2015, "01:01", "Tuesday")]
+        [TestCase(1, 1, 15, 9, 2015, "01:01", "Monday")]
+        [TestCase(2, 31, 16, 9, 2015, "02:31", "Tuesday")]
         [TestCase(1, 1, 16, 9, 2015, "01:01", "Wednesday")]
+        [TestCase(1, 1, 16, 9, 2015, "01:01", "Thursday")]
+        [TestCase(1, 1, 15, 9, 2015, "01:01", "Friday")]
+        [TestCase(1, 1, 15, 9, 2015, "01:01", "Saturday")]
         [TestCase(9, 10, 20, 9, 2015, "09:10", "Sunday")]
         public void ParseValidTimeWithWeekDay(int expectedHour, int expectedMinute, int expectedDay, int expectedMonth, int expectedYear, params string[] dateTime)
         {
@@ -40,3 +44,4 @@ namespace ServiceSchedulerTests
     }
 }
 
+ 
