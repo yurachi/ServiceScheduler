@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Globalization;
+using ServiceScheduler.datamodels;
 
 namespace ServiceScheduler
 {
@@ -14,68 +15,58 @@ namespace ServiceScheduler
             Tolerance = new TimeSpan(0, 1, 0);
 		}
 
-		public ExecutionDateTime Convert(string timeString)
+		public ExecutionDateTime Convert(DataSourceDateTime sourceTime)
 		{
-			var timeTokens = timeString.Split (' ');
-			var recognisedCount = 0;
-
-			var isOnce = timeTokens.Last ().Equals ("once");
-			if (isOnce)
-				++recognisedCount;
-			
-			var isNow = timeTokens.First ().Equals ("now");
-			if (isNow)
-				++recognisedCount;
-
-            if (isNow)
-                isOnce = true;
-
 			var parsedDateTime = _dateTimeNow ();
-			if(!isNow)
+			parsedDateTime = ParseDateTime (sourceTime.ScheduledTime, sourceTime.DayOfWeek);
+			var scheduled = new ExecutionDateTime () 
 			{
-				if (!isOnce)
-				{
-					parsedDateTime = ParseDateTime (timeTokens);
-				}
-				else
-				{
-					if (timeTokens.Length == 2)
-					{
-						parsedDateTime = ParseDateTime (timeTokens [0]);
-						++recognisedCount;
-					}
-					else
-					{
-						parsedDateTime = ParseDateTime (timeTokens [0],timeTokens [1]);
-						recognisedCount += 2;
-					}
-				}
-			}
-			//TODO: check recognisedCount
-			var date = new ExecutionDateTime () 
-			{
-				IsOnce = isOnce,
-				IsNow = isNow,
-				ScheduledTime = isNow ? parsedDateTime.Add(Tolerance) : parsedDateTime.Date,
+				IsOnce = sourceTime.IsOnce,
+                IsStop = sourceTime.IsStop,
+				Remove = sourceTime.Callback,
+				ScheduledTime = parsedDateTime,
 			};
-			return date;
+			return scheduled;
 		}
 
-		protected DateTime ParseDateTime(params string[] timeStrings)
+		protected DateTime ParseDateTime(string timeString, string dayOfWeek)
 		{
             DateTime result;
 
-            var parsedTime = DateTime.Parse(timeStrings[0], CultureInfo.CreateSpecificCulture("en-UK"), DateTimeStyles.NoCurrentDateDefault);
-                result = _dateTimeNow().Date
-                    .Add(parsedTime.TimeOfDay)
-                    .AddDays((parsedTime.TimeOfDay.Add(Tolerance) > _dateTimeNow().TimeOfDay) ? 0 : 1);
+            var parsedTime = DateTime.Parse(
+                timeString, 
+                CultureInfo.CreateSpecificCulture("en-UK"), 
+                DateTimeStyles.NoCurrentDateDefault);
 
-            var dayString = string.Empty;
-                if (timeStrings[1].Length < 6)
-                    yearString = "-" + _dateTimeNow().Year.ToString();
-                result = DateTime.Parse(timeStrings[1] + yearString + " " + timeStrings[0], CultureInfo.CreateSpecificCulture("en-UK"));
-            
+            result = _dateTimeNow().Date
+                .Add(parsedTime.TimeOfDay)
+                .AddDays(GetDayForTimeInPast(parsedTime, dayOfWeek))
+                .AddDays(GetWeekDaysDifference(dayOfWeek));
+           
 			return result;
+        }
+
+        protected int GetWeekDaysDifference(string dayOfWeek)
+        {
+            var scheduledDayOfWeek = (int)Enum.Parse(typeof(DayOfWeek), dayOfWeek);
+            var currentDayOfWeek = (int)_dateTimeNow().DayOfWeek;
+            var dayDifference = scheduledDayOfWeek - currentDayOfWeek;
+            if (dayDifference < 0)
+                dayDifference += 7;
+            return dayDifference;
+        }
+
+        /// <summary>
+        /// If the time is passed today, add 1 day for scheduling on tomorrow, 
+        /// unless the weekday is specified
+        /// </summary>
+        protected int GetDayForTimeInPast(DateTime parsedTime, string dayOfWeek)
+        {
+            if ((parsedTime.TimeOfDay < _dateTimeNow().TimeOfDay) && 
+                (dayOfWeek == null))
+                return 1;
+            else
+                return 0;
         }
 
         public TimeSpan Tolerance { protected get; set; }

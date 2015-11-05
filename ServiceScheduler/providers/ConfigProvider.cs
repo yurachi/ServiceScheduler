@@ -25,11 +25,11 @@ namespace ServiceScheduler
 			Pause ();
 			_executionTimes.Clear ();
 			_recurrentTimes.Clear ();
-			_recurrentTimes.AddRange(_dataProvider.GetRecurrentTimes ());
+			//_recurrentTimes.AddRange(_dataProvider.GetRecurrentTimes ());
 			AddTodayTimes (_recurrentTimes);
 			AddTomorrowTimes (_recurrentTimes);
 			_onceTimes.Clear ();
-			_onceTimes.AddRange(_dataProvider.GetOnceTimes ());
+			//_onceTimes.AddRange(_dataProvider.GetOnceTimes ());
 			AddOnceTimes (_onceTimes);
 			Resume ();
 		}
@@ -59,7 +59,7 @@ namespace ServiceScheduler
 		{
 			//TODO: wait if Pause
 			//TODO: find nearest execution time in the collection
-			return _dateTimeNow();
+			return new ExecutionDateTime();
 		}
 
 		public TimeSpan GetMinimalTimeInterval()

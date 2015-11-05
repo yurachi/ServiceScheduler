@@ -23,7 +23,7 @@ namespace ServiceScheduler
 			while(true)
 			{
                 var nextExecutionTime = _configProvider.GetNextExecutionTime();
-                if (TimeDifference(nextExecutionTime.ScheduledTime, _dateTimeNow) < _configProvider.GetMinimalTimeInterval ()) 
+                if (CalculateAbsoluteTimeDifference(nextExecutionTime.ScheduledTime) < _configProvider.GetMinimalTimeInterval ()) 
 				{
                     if (nextExecutionTime.IsOnce)
                         nextExecutionTime.Remove();
@@ -35,6 +35,14 @@ namespace ServiceScheduler
 				}
 			}
 		}
-	}
+
+        protected TimeSpan CalculateAbsoluteTimeDifference(DateTime scheduledTime)
+        {
+            if (scheduledTime > _dateTimeNow())
+                return scheduledTime.Subtract(_dateTimeNow());
+            else
+                return _dateTimeNow().Subtract(scheduledTime);
+        }
+    }
 }
 

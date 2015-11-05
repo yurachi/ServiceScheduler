@@ -26,7 +26,7 @@ namespace ServiceSchedulerTests
             };
 
 
-            var actual = objectUnderTest.Convert (time);
+            var actual = objectUnderTest.Convert(new ServiceScheduler.datamodels.DataSourceDateTime());
 
             helpers.Assert.ExecutionDateTimeMatch(expectedHour, expectedMinute, expectedDay,expectedMonth, expectedYear, expectedNow, expectedOnce, actual);
 		}
@@ -43,7 +43,7 @@ namespace ServiceSchedulerTests
                 Tolerance = new TimeSpan(0, 1, 0),
             };
 
-            var actual = objectUnderTest.Convert (time);
+            var actual = objectUnderTest.Convert (new ServiceScheduler.datamodels.DataSourceDateTime());
 
             helpers.Assert.ExecutionDateTimeMatch(expectedHour, expectedMinute, expectedDay,expectedMonth, expectedYear, expectedNow, expectedOnce, actual);
 		}
@@ -66,7 +66,7 @@ namespace ServiceSchedulerTests
                 Tolerance = new TimeSpan(0,1,0),
             };
 
-			var actual = objectUnderTest.Convert (time);
+			var actual = objectUnderTest.Convert (new ServiceScheduler.datamodels.DataSourceDateTime());
 
             helpers.Assert.ExecutionDateTimeMatch(expectedHour, expectedMinute, expectedDay, expectedMonth, expectedYear, expectedNow, expectedOnce, actual);
 		}

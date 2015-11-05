@@ -7,7 +7,7 @@ namespace ServiceSchedulerTests.helpers
 {
     public class Assert
     {
-        public static void ExecutionDateTimeMatch(int expectedHour, int expectedMinute, int expectedDay, int expectedMonth, int expectedYear, bool expectedNow, bool expectedOnce, ExecutionDateTime actual)
+        public static void ExecutionDateTimeMatch(int expectedHour, int expectedMinute, int expectedDay, int expectedMonth, int expectedYear, bool expectedStop, bool expectedOnce, ExecutionDateTime actual)
         {
             var sb = new StringBuilder();
 
@@ -36,9 +36,9 @@ namespace ServiceSchedulerTests.helpers
                 sb.AppendFormat("year expected:{0} actual:{1}, ", expectedYear, actual.ScheduledTime.Year);
             }
 
-            if (expectedNow != actual.IsNow)
+            if (expectedStop != actual.IsStop)
             {
-                sb.AppendFormat("now expected:{0} actual:{1}, ", expectedNow, actual.IsNow);
+                sb.AppendFormat("isStop expected:{0} actual:{1}, ", expectedStop, actual.IsStop);
             }
 
             if (expectedOnce != actual.IsOnce)

@@ -65,11 +65,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="helpers\Assert.cs" />
+    <Compile Include="mocks\ConfigProviderMockFactory.cs" />
     <Compile Include="tests\ConfigProviderTests\AddTodayTimesTest.cs" />
+    <Compile Include="tests\ServiceCallerTests\CalculateAbsoluteTimeDifferenceTests.cs" />
+    <Compile Include="tests\ServiceCallerTests\MainLoopTest.cs" />
+    <Compile Include="tests\TimeStringConverterTests\GetWeekDaysDifferenceTest.cs" />
+    <Compile Include="tests\TimeStringConverterTests\GetDayForPastTimeTest.cs" />
     <Compile Include="wrappers\ConfigProviderWrapper.cs" />
     <Compile Include="mocks\DataProviderMockFactory.cs" />
     <Compile Include="tests\TimeStringConverterTests\ConvertTest.cs" />
     <Compile Include="tests\TimeStringConverterTests\ParseDateTimeTest.cs" />
+    <Compile Include="wrappers\ServiceCallerWrapper.cs" />
     <Compile Include="wrappers\TimeStringConverterWrapper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -86,4 +92,5 @@
       <Name>ServiceScheduler</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
 </Project>
