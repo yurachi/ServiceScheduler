@@ -9,8 +9,8 @@ namespace ServiceScheduler
 		}
 
 		public bool IsOnce { get; set;}
-		public bool IsNow { get; set;}
 		public DateTime ScheduledTime { get; set;}
+        public Action Remove { get; set; }
 	}
 }
 

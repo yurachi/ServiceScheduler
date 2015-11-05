@@ -1,12 +1,12 @@
-﻿using System;
+﻿using ServiceScheduler.datamodels;
+using System;
 using System.Collections.Generic;
 
 namespace ServiceScheduler
 {
 	public interface IDataProvider
 	{
-		IList<string> GetRecurrentTimes();
-		IList<string> GetOnceTimes();
+        IList<DataSourceDateTime> GetRecurrentTimes();
 	}
 }
 

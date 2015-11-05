@@ -7,24 +7,31 @@ namespace ServiceScheduler
 	{
 		protected Action _doWork;
 		protected IConfigProvider _configProvider;
+        protected Func<DateTime> _dateTimeNow;
+        protected Action<int> _threadSleep;
 
-		public ServiceCaller (IConfigProvider configProvider)
+        public ServiceCaller (IConfigProvider configProvider)
 		{
 			_configProvider = configProvider;
-		}
+            _dateTimeNow = () => DateTime.Now;
+            _threadSleep = (x) => Thread.Sleep(x);
+        }
 
-		public void MainLoop(Action doWork)
+        public void MainLoop(Action doWork)
 		{
 			_doWork = doWork;
 			while(true)
 			{
-				if ((_configProvider.GetNextExecutionTime () - DateTime.Now) < _configProvider.GetMinimalTimeInterval ()) 
+                var nextExecutionTime = _configProvider.GetNextExecutionTime();
+                if (TimeDifference(nextExecutionTime.ScheduledTime, _dateTimeNow) < _configProvider.GetMinimalTimeInterval ()) 
 				{
+                    if (nextExecutionTime.IsOnce)
+                        nextExecutionTime.Remove();
 					_doWork ();//TODO:background thread?
 				}
 				else
 				{
-					Thread.Sleep(_configProvider.GetMinimalSleepInterval ().Milliseconds);
+					_threadSleep(_configProvider.GetMinimalSleepInterval ().Milliseconds);
 				}
 			}
 		}

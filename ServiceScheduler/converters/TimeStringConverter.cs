@@ -64,20 +64,17 @@ namespace ServiceScheduler
 		protected DateTime ParseDateTime(params string[] timeStrings)
 		{
             DateTime result;
-            if (timeStrings.Length == 1)
-            {
-                var parsedTime = DateTime.Parse(timeStrings[0], CultureInfo.CreateSpecificCulture("en-UK"), DateTimeStyles.NoCurrentDateDefault);
+
+            var parsedTime = DateTime.Parse(timeStrings[0], CultureInfo.CreateSpecificCulture("en-UK"), DateTimeStyles.NoCurrentDateDefault);
                 result = _dateTimeNow().Date
                     .Add(parsedTime.TimeOfDay)
                     .AddDays((parsedTime.TimeOfDay.Add(Tolerance) > _dateTimeNow().TimeOfDay) ? 0 : 1);
-            }
-            else
-            {
-                var yearString = string.Empty;
+
+            var dayString = string.Empty;
                 if (timeStrings[1].Length < 6)
                     yearString = "-" + _dateTimeNow().Year.ToString();
                 result = DateTime.Parse(timeStrings[1] + yearString + " " + timeStrings[0], CultureInfo.CreateSpecificCulture("en-UK"));
-            }
+            
 			return result;
         }
 

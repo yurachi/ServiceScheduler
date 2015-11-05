@@ -55,7 +55,7 @@ namespace ServiceScheduler
 			
 		}
 
-		public DateTime GetNextExecutionTime()
+		public ExecutionDateTime GetNextExecutionTime()
 		{
 			//TODO: wait if Pause
 			//TODO: find nearest execution time in the collection

@@ -5,7 +5,7 @@ namespace ServiceScheduler
 	public interface IConfigProvider
 	{
 		void Setup();
-		DateTime GetNextExecutionTime();
+		ExecutionDateTime GetNextExecutionTime();
 		TimeSpan GetMinimalTimeInterval ();
 		TimeSpan GetMinimalSleepInterval();
 	}
