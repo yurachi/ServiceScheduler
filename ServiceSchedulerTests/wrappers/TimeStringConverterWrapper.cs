@@ -6,12 +6,12 @@ namespace ServiceSchedulerTests
 {
 	public class TimeStringConverterWrapper : TimeStringConverter
 	{
-		new public DateTime ParseDateTime(string timeString, string dayOfWeek)
+		new public DateTime ParseTime(string timeString, string dayOfWeek)
 		{
-			return base.ParseDateTime (timeString, dayOfWeek);
+			return base.ParseTime (timeString, dayOfWeek);
 		}
 
-        new public int GetDayForPastTime(DateTime parsedTime, string dayOfWeek)
+        new public int GetDayForTimeInPast(DateTime parsedTime, string dayOfWeek)
         {
             return base.GetDayForTimeInPast(parsedTime, dayOfWeek);
         }

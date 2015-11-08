@@ -18,7 +18,7 @@ namespace ServiceSchedulerTests.tests.TimeStringConverterTests
             };
             var parsedDateTime = DateTime.Parse(parsedTime);
 
-            var actual = objectUnderTest.GetDayForPastTime(parsedDateTime, dayOfWeek);
+            var actual = objectUnderTest.GetDayForTimeInPast(parsedDateTime, dayOfWeek);
 
             Assert.AreEqual(expected, actual);
         }
@@ -38,7 +38,7 @@ namespace ServiceSchedulerTests.tests.TimeStringConverterTests
             };
             var parsedDateTime = DateTime.Parse(parsedTime);
 
-            var actual = objectUnderTest.GetDayForPastTime(parsedDateTime, dayOfWeek);
+            var actual = objectUnderTest.GetDayForTimeInPast(parsedDateTime, dayOfWeek);
 
             Assert.AreEqual(expected, actual);
         }

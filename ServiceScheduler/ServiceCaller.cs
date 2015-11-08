@@ -15,12 +15,13 @@ namespace ServiceScheduler
 			_configProvider = configProvider;
             _dateTimeNow = () => DateTime.Now;
             _threadSleep = (x) => Thread.Sleep(x);
+            StopMainLoop = false;
         }
 
         public void MainLoop(Action doWork)
 		{
 			_doWork = doWork;
-			while(true)
+			while(!StopMainLoop)
 			{
                 var nextExecutionTime = _configProvider.GetNextExecutionTime();
                 if (CalculateAbsoluteTimeDifference(nextExecutionTime.ScheduledTime) < _configProvider.GetMinimalTimeInterval ()) 
@@ -43,6 +44,8 @@ namespace ServiceScheduler
             else
                 return _dateTimeNow().Subtract(scheduledTime);
         }
+
+        public bool StopMainLoop { get; set; } //TODO: make it Synchronised<bool>
     }
 }
 

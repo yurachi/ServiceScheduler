@@ -12,6 +12,11 @@ namespace ServiceSchedulerTests.mocks
             _configProviderMock = Substitute.For<IConfigProvider>();
         }
 
+        public void SetNextExecutionTimeReturn(ExecutionDateTime time)
+        {
+            _configProviderMock.GetNextExecutionTime().Returns(time);
+        }
+
         public IConfigProvider Create()
         {
             return _configProviderMock;

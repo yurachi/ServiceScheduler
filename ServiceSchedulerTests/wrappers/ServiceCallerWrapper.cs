@@ -9,9 +9,17 @@ namespace ServiceSchedulerTests.wrappers
         {
         }
 
-        new public TimeSpan CalculateAbsoluteTimeDifference(DateTime scheduledTime, DateTime dateTimeNow)
+        new public TimeSpan CalculateAbsoluteTimeDifference(DateTime scheduledTime)
         {
-            return base.CalculateAbsoluteTimeDifference(scheduledTime, dateTimeNow);
+            return base.CalculateAbsoluteTimeDifference(scheduledTime);
+        }
+
+        public DateTime Now
+        {
+            set
+            {
+                _dateTimeNow = () => value;
+            }
         }
     }
 }

@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace ServiceSchedulerTests
 {
     [TestFixture]
-	public class ParseDateTimeTest
+	public class ParseTimeTest
 	{
         [TestCase(1, 1, 15, 9, 2015, "01:01", null)]
         [TestCase(1, 1, 15, 9, 2015, "01:01", "Monday")]
@@ -14,7 +14,7 @@ namespace ServiceSchedulerTests
             objectUnderTest.Now = new DateTime(expectedYear, expectedMonth, expectedDay, expectedHour, expectedMinute, 0);
             var expected = new DateTime(expectedYear, expectedMonth, expectedDay, expectedHour, expectedMinute, 0);
 
-            var actual = objectUnderTest.ParseDateTime(dateTime, dayOfWeek);
+            var actual = objectUnderTest.ParseTime(dateTime, dayOfWeek);
 
             Assert.AreEqual(expected, actual);
         }

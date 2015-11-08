@@ -18,7 +18,7 @@ namespace ServiceScheduler
 		public ExecutionDateTime Convert(DataSourceDateTime sourceTime)
 		{
 			var parsedDateTime = _dateTimeNow ();
-			parsedDateTime = ParseDateTime (sourceTime.ScheduledTime, sourceTime.DayOfWeek);
+			parsedDateTime = ParseTime (sourceTime.ScheduledTime, sourceTime.DayOfWeek);
 			var scheduled = new ExecutionDateTime () 
 			{
 				IsOnce = sourceTime.IsOnce,
@@ -29,7 +29,7 @@ namespace ServiceScheduler
 			return scheduled;
 		}
 
-		protected DateTime ParseDateTime(string timeString, string dayOfWeek)
+		protected DateTime ParseTime(string timeString, string dayOfWeek)
 		{
             DateTime result;
 

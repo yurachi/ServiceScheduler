@@ -65,14 +65,14 @@ namespace ServiceScheduler
 		public TimeSpan GetMinimalTimeInterval()
 		{
 			//TODO: wait if Pause
-			return new TimeSpan();
+			return new TimeSpan(0,1,0);
 		}
 
 		public TimeSpan GetMinimalSleepInterval()
 		{
 			//TODO: wait if Pause
 			//TODO: return minimal of (NextExecution - Now) and DefaultSleepInterval
-			return new TimeSpan();
+			return new TimeSpan(0,0,59); //59 seconds
 		}
 	}
 }
