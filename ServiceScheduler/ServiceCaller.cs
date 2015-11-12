@@ -15,15 +15,16 @@ namespace ServiceScheduler
 			_configProvider = configProvider;
             _dateTimeNow = () => DateTime.Now;
             _threadSleep = (x) => Thread.Sleep(x);
-            StopMainLoop = false;
+            MainLoopRunning = true;
         }
 
         public void MainLoop(Action doWork)
 		{
 			_doWork = doWork;
-			while(!StopMainLoop)
+            ExecutionDateTime nextExecutionTime;
+            while (MainLoopRunning)
 			{
-                var nextExecutionTime = _configProvider.GetNextExecutionTime();
+                nextExecutionTime = _configProvider.GetNextExecutionTime();
                 if (CalculateAbsoluteTimeDifference(nextExecutionTime.ScheduledTime) < _configProvider.GetMinimalTimeInterval ()) 
 				{
                     if (nextExecutionTime.IsOnce)
@@ -45,7 +46,7 @@ namespace ServiceScheduler
                 return _dateTimeNow().Subtract(scheduledTime);
         }
 
-        public bool StopMainLoop { get; set; } //TODO: make it Synchronised<bool>
+        public virtual bool MainLoopRunning { get; set; } //TODO: make it Synchronised<bool>
     }
 }
 

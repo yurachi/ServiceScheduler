@@ -10,23 +10,49 @@ namespace ServiceSchedulerTests.tests.ServiceCallerTests
     public class MainLoopTest
     {
         [Test]
-        public void OnceTimeMatchingCurrentIsRemoved()
+        public void CurrentTimeMatchingScheduledActionCalled()
         {
             var currentDateTime = new DateTime(2015, 9, 14, 9, 34, 01);
-            var factory = new ConfigProviderMockFactory();
-            var actualRemoveCalled = false;
+            var configFactory = new ConfigProviderMockFactory();
+            var actualDoWorkCalled = false;
 
-            factory.SetNextExecutionTimeReturn(new ExecutionDateTime()
-            {
-                ScheduledTime = currentDateTime,
-                Remove = () => { actualRemoveCalled = true; }
-            });
-            var objectUnderTest = new ServiceCallerWrapper(factory.Create())
+            configFactory.SetNextExecutionTimeReturn(
+                new ExecutionDateTime()
+                {
+                    ScheduledTime = currentDateTime,
+                });
+
+            var objectUnderTest = new ServiceCallerWrapper(configFactory.Create())
             {
                 Now = currentDateTime,
             };
 
-            objectUnderTest.MainLoop(()=> { objectUnderTest.StopMainLoop = true; });
+            objectUnderTest.MainLoop(() => { actualDoWorkCalled = true; });
+
+            Assert.IsTrue(actualDoWorkCalled);
+        }
+
+        [Test]
+        public void CurrentTimeMatchingScheduledOnceTimeRemoveCalled()
+        {
+            var currentDateTime = new DateTime(2015, 9, 14, 9, 34, 01);
+            var configFactory = new ConfigProviderMockFactory();
+            var actualRemoveCalled = false;
+
+            configFactory.SetNextExecutionTimeReturn(
+                new ExecutionDateTime()
+                {
+                    IsOnce = true,
+                    ScheduledTime = currentDateTime,
+                    Remove = () => { actualRemoveCalled = true; }
+                });
+
+            var objectUnderTest = new ServiceCallerWrapper(configFactory.Create())
+            {
+                Now = currentDateTime,
+            };
+
+            objectUnderTest.MainLoop(() => { });
 
             Assert.IsTrue(actualRemoveCalled);
         }

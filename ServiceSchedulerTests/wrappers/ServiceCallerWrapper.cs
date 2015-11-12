@@ -1,4 +1,5 @@
 ﻿using ServiceScheduler;
+using ServiceSchedulerTests.mocks;
 using System;
 
 namespace ServiceSchedulerTests.wrappers
@@ -7,6 +8,9 @@ namespace ServiceSchedulerTests.wrappers
     {
         public ServiceCallerWrapper(IConfigProvider configProvider) : base (configProvider)
         {
+            var factory = new BoolPropertyMockFactory();
+            factory.SetReturnValues(true, false);
+            MainLoopRunningMock = factory.Create();
         }
 
         new public TimeSpan CalculateAbsoluteTimeDifference(DateTime scheduledTime)
@@ -19,6 +23,16 @@ namespace ServiceSchedulerTests.wrappers
             set
             {
                 _dateTimeNow = () => value;
+            }
+        }
+
+        public BoolPropertyMockFactory.IBoolProperty MainLoopRunningMock { get; set; }
+
+        override public bool MainLoopRunning
+        {
+            get
+            {
+                return MainLoopRunningMock.Property;
             }
         }
     }
