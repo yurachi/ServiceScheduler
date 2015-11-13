@@ -1,76 +1,33 @@
 using System;
 using NUnit.Framework;
+using ServiceScheduler.datamodels;
 
 namespace ServiceSchedulerTests
 {
     [TestFixture]
 	public class ConvertTest
 	{
-		private TimeStringConverterWrapper objectUnderTest;
-
-		[TestCase (1, 1, 15, 9, 2015, false, false, "01:01")]
-		[TestCase (1, 1, 15, 9, 2015, false, true, "01:01 once")]
-		[TestCase (1, 1, 1, 1, 2015, false, false, "01:01 01-Jan")]
-        [TestCase(1, 1, 1, 1, 2015, false, true, "01:01 01-Jan once")]
-        [TestCase(1, 1, 15, 10, 2016, false, false, "01:01 15-Oct-2016")]
-        [TestCase(1, 1, 15, 10, 2016, false, true, "01:01 15-Oct-2016 once")]
-        [TestCase (9, 24, 15, 9, 2015, true, true, "now")]
-		[TestCase (9, 24, 15, 9, 2015, true, true, "now once")]
-        [TestCase(9, 24, 15, 9, 2015, true, true, "once")]
-        public void ConvertValidTodayTime (int expectedHour, int expectedMinute, int expectedDay, int expectedMonth, int expectedYear, bool expectedNow, bool expectedOnce, string time)
-		{
-            objectUnderTest = new TimeStringConverterWrapper()
+        [Test]
+        public void ShouldReturnExecutionDateTime()
+        {
+            var objectUnderTest = new TimeStringConverterWrapper()
             {
-                Now = new DateTime(2015, 9, 15, 9, 24, 31),
-                Tolerance = new TimeSpan(0, 1, 0),
+                Now = new DateTime(2015, 9, 14, 9, 34, 0),
             };
 
-
-            var actual = objectUnderTest.Convert(new ServiceScheduler.datamodels.DataSourceDateTime());
-
-            helpers.Assert.ExecutionDateTimeMatch(expectedHour, expectedMinute, expectedDay,expectedMonth, expectedYear, expectedNow, expectedOnce, actual);
-		}
-
-
-        [TestCase (1, 1, 15, 9, 2015, false, false, "01:01")]
-		[TestCase (9, 25, 15, 9, 2015, true, true, "now")]
-		[TestCase (9, 25, 15, 9, 2015, true, true, "once")]
-		public void ConversionToleranceValidTodayTime (int expectedHour, int expectedMinute, int expectedDay, int expectedMonth, int expectedYear, bool expectedNow, bool expectedOnce, string time)
-		{
-            objectUnderTest = new TimeStringConverterWrapper()
+            var sourceDateTime = new DataSourceDateTime()
             {
-                Now = new DateTime(2015, 9, 15, 9, 24, 31),
-                Tolerance = new TimeSpan(0, 1, 0),
+                DayOfWeek = "Monday",
+                IsOnce = false,
+                IsStop = false,
+                ScheduledTime = "18:34",
+                Callback = null
             };
 
-            var actual = objectUnderTest.Convert (new ServiceScheduler.datamodels.DataSourceDateTime());
+            var actual = objectUnderTest.Convert(sourceDateTime);
 
-            helpers.Assert.ExecutionDateTimeMatch(expectedHour, expectedMinute, expectedDay,expectedMonth, expectedYear, expectedNow, expectedOnce, actual);
-		}
-
-		[TestCase (1, 1, 15, 9, 2015, false, false, "01:61")]
-		[TestCase (1, 1, 15, 9, 2015, false, false, "24:01 once")]
-        [TestCase(1, 1, 15, 9, 2015, false, false, "23:01 one")]
-        [TestCase (1, 1, 15, 9, 2015, false, false, "01:01 31-Sep")] 
-		[TestCase (1, 1, 15, 9, 2015, false, false, "01:01 01:02")]
-		[TestCase (1, 1, 15, 9, 2015, false, false, "01:01 now")]
-        [TestCase(1, 1, 15, 9, 2015, false, false, "now 01:01")]
-        [TestCase(1, 1, 15, 9, 2015, false, false, "now 01:01 once")]
-        [TestCase (1, 1, 15, 9, 2015, false, false, "new")]
-		[TestCase (1, 1, 15, 9, 2015, false, false, "now one")]
-		public void ConvertInvalidTime (int expectedHour, int expectedMinute, int expectedDay, int expectedMonth, int expectedYear, bool expectedNow, bool expectedOnce, string time)
-		{
-            objectUnderTest = new TimeStringConverterWrapper()
-            {
-                Now = new DateTime(2015, 9, 15, 9, 24, 31),
-                Tolerance = new TimeSpan(0,1,0),
-            };
-
-			var actual = objectUnderTest.Convert (new ServiceScheduler.datamodels.DataSourceDateTime());
-
-            helpers.Assert.ExecutionDateTimeMatch(expectedHour, expectedMinute, expectedDay, expectedMonth, expectedYear, expectedNow, expectedOnce, actual);
-		}
-
+            Assert.IsNotNull(actual);
+        }
 	}
 }
 
