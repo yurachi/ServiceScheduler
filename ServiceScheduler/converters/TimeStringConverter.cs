@@ -46,6 +46,9 @@ namespace ServiceScheduler
 			return result;
         }
 
+        /// <summary>
+        /// If the specified day of week is passed, schedule for the next week
+        /// </summary>
         protected int GetWeekDaysDifference(string dayOfWeek)
         {
             var scheduledDayOfWeek = (int)Enum.Parse(typeof(DayOfWeek), dayOfWeek);
