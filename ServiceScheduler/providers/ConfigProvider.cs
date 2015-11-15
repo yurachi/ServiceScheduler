@@ -5,18 +5,14 @@ namespace ServiceScheduler
 {
 	public class ConfigProvider : IConfigProvider
 	{
-		protected List<DateTime> _executionTimes;
-		protected List<string> _recurrentTimes;
-		protected List<string> _onceTimes;
+		protected List<ExecutionDateTime> _executionTimes;
 		protected IDataProvider _dataProvider;
 		protected Func<DateTime> _dateTimeNow;
 
 		public ConfigProvider (IDataProvider dataProvider)
 		{
 			_dataProvider = dataProvider;
-			_executionTimes = new List<DateTime> ();
-			_recurrentTimes = new List<string> ();
-			_onceTimes = new List<string> ();
+			_executionTimes = new List<ExecutionDateTime> ();
 			_dateTimeNow = () => DateTime.Now;
 		}
 
@@ -24,14 +20,7 @@ namespace ServiceScheduler
 		{
 			Pause ();
 			_executionTimes.Clear ();
-			_recurrentTimes.Clear ();
-			//_recurrentTimes.AddRange(_dataProvider.GetRecurrentTimes ());
-			AddTodayTimes (_recurrentTimes);
-			AddTomorrowTimes (_recurrentTimes);
-			_onceTimes.Clear ();
-			//_onceTimes.AddRange(_dataProvider.GetOnceTimes ());
-			AddOnceTimes (_onceTimes);
-			Resume ();
+            Resume();
 		}
 
 		protected void Pause()

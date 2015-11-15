@@ -78,7 +78,7 @@
     <Compile Include="helpers\Assert.cs" />
     <Compile Include="mocks\BoolPropertyMockFactory.cs" />
     <Compile Include="mocks\ConfigProviderMockFactory.cs" />
-    <Compile Include="tests\ConfigProviderTests\AddTodayTimesTest.cs" />
+    <Compile Include="tests\ConfigProviderTests\GetNextExecutionTimeTests.cs" />
     <Compile Include="tests\ServiceCallerTests\CalculateAbsoluteTimeDifferenceTests.cs" />
     <Compile Include="tests\ServiceCallerTests\MainLoopTest.cs" />
     <Compile Include="tests\TimeStringConverterTests\GetWeekDaysDifferenceTest.cs" />
