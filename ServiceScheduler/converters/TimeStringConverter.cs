@@ -12,7 +12,7 @@ namespace ServiceScheduler
 		public TimeStringConverter()
 		{
 			_dateTimeNow = () => DateTime.Now;
-            Tolerance = new TimeSpan(0, 1, 0);
+            Tolerance = new TimeSpan(0, 0, 59);
 		}
 
 		public ExecutionDateTime Convert(DataSourceDateTime sourceTime)
@@ -51,8 +51,8 @@ namespace ServiceScheduler
         /// </summary>
         protected int GetWeekDaysDifference(string dayOfWeek)
         {
-            var scheduledDayOfWeek = (int)Enum.Parse(typeof(DayOfWeek), dayOfWeek);
             var currentDayOfWeek = (int)_dateTimeNow().DayOfWeek;
+            var scheduledDayOfWeek = (int)Enum.Parse(typeof(DayOfWeek), dayOfWeek??_dateTimeNow().DayOfWeek.ToString());
             var dayDifference = scheduledDayOfWeek - currentDayOfWeek;
             if (dayDifference < 0)
                 dayDifference += 7;
@@ -65,7 +65,7 @@ namespace ServiceScheduler
         /// </summary>
         protected int GetDayForTimeInPast(DateTime parsedTime, string dayOfWeek)
         {
-            if ((parsedTime.TimeOfDay < _dateTimeNow().TimeOfDay) && 
+            if ((parsedTime.TimeOfDay.Add(Tolerance)< _dateTimeNow().TimeOfDay) && 
                 (dayOfWeek == null))
                 return 1;
             else
