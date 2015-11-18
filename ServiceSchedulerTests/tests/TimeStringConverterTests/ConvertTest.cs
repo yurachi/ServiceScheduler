@@ -21,7 +21,7 @@ namespace ServiceSchedulerTests
                 IsOnce = false,
                 IsStop = false,
                 ScheduledTime = "18:34",
-                Callback = null
+                Remove = null
             };
 
             var actual = objectUnderTest.Convert(sourceDateTime);

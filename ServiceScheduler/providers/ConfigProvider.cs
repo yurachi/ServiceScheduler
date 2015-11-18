@@ -14,41 +14,44 @@ namespace ServiceScheduler
 			_dataProvider = dataProvider;
 			_executionTimes = new List<ExecutionDateTime> ();
 			_dateTimeNow = () => DateTime.Now;
+            InsertExecutionTimes(CreateResetConfigTimes());
 		}
 
-		public void Setup()
+        protected void InsertExecutionTimes(IEnumerable<ExecutionDateTime> newTimes)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected IEnumerable<ExecutionDateTime> CreateResetConfigTimes()
+        {
+            //00:58 till 07:58  every hour
+            //08:03 till 21:58 every 5 min
+            throw new NotImplementedException();
+        }
+
+        protected void ResetServiceExecutionTimes(IEnumerable<ExecutionDateTime> newTimes)
 		{
-			Pause ();
-			_executionTimes.Clear ();
-            Resume();
+            RemoveServiceExecutionTimes();
+            var serviceExecutionTimes = LoadServiceExecutionTimes();
+            InsertExecutionTimes(serviceExecutionTimes);
 		}
 
-		protected void Pause()
-		{
-		}
+        protected void RemoveServiceExecutionTimes()
+        {
+            throw new NotImplementedException();
+        }
 
-		protected void Resume()
-		{
-		}
+        protected IEnumerable<ExecutionDateTime> LoadServiceExecutionTimes()
+        {
+            throw new NotImplementedException();
+        }
 
-		protected void AddTodayTimes(IList<string> recurrentTimeCollection)
+        public ExecutionDateTime GetNextExecutionTime()
 		{
-		}
-
-		protected void AddTomorrowTimes(IList<string> recurrentTimeCollection)
-		{
-		}
-
-		protected void AddOnceTimes(IList<string> timeCollection)
-		{
-			
-		}
-
-		public ExecutionDateTime GetNextExecutionTime()
-		{
-			//TODO: wait if Pause
-			//TODO: find nearest execution time in the collection
-			return new ExecutionDateTime();
+            //TODO: wait if Pause
+            //TODO: find nearest execution time in the collection
+            //TODO: in the case of conflict ConfigReread is low priority
+            throw new NotImplementedException();
 		}
 
 		public TimeSpan GetMinimalTimeInterval()
@@ -63,6 +66,11 @@ namespace ServiceScheduler
 			//TODO: return minimal of (NextExecution - Now) and DefaultSleepInterval
 			return new TimeSpan(0,0,59); //59 seconds
 		}
-	}
+
+        public void ResetConfig()
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
 

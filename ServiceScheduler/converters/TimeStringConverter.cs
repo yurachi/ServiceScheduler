@@ -23,7 +23,7 @@ namespace ServiceScheduler
 			{
 				IsOnce = sourceTime.IsOnce,
                 IsStop = sourceTime.IsStop,
-				Remove = sourceTime.Callback,
+				Remove = sourceTime.Remove,
 				ScheduledTime = parsedDateTime,
 			};
 			return scheduled;

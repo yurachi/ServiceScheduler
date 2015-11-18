@@ -11,7 +11,25 @@ namespace ServiceSchedulerTests
 			
 		}
 
-		public DateTime Now 
+        new public void InsertExecutionTimes(IEnumerable<ExecutionDateTime> newTimes)
+        {
+            base.InsertExecutionTimes(newTimes);
+        }
+
+        public List<ExecutionDateTime> ExecutionTimes
+        {
+            get
+            {
+                return _executionTimes;
+            }
+
+            set
+            {
+                _executionTimes = value;
+            }
+        }
+
+        public DateTime Now 
 		{
 			set
 			{
