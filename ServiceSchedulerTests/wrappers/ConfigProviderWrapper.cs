@@ -16,6 +16,11 @@ namespace ServiceSchedulerTests
             base.InsertExecutionTimes(newTimes);
         }
 
+        new public IEnumerable<ExecutionDateTime> CreateResetConfigTimes()
+        {
+            return base.CreateResetConfigTimes();
+        }
+
         public List<ExecutionDateTime> ExecutionTimes
         {
             get

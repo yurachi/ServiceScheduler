@@ -22,11 +22,34 @@ namespace ServiceScheduler
             throw new NotImplementedException();
         }
 
+        //22:00 till 08:00  every hour = 9 runs (exclusive)
+        //08:00 till 22:00 every 5 min = 168 runs (inclusive)
         protected IEnumerable<ExecutionDateTime> CreateResetConfigTimes()
         {
-            //00:58 till 07:58  every hour
-            //08:03 till 21:58 every 5 min
-            throw new NotImplementedException();
+            var smallStep = new TimeSpan(0, 5, 0);
+            var configTimes = new List<ExecutionDateTime>();
+            var offset = new TimeSpan();
+            for(var i = 0; i < 177; ++i)
+            {
+                var time = _dateTimeNow().Add(offset);
+                if (time.TimeOfDay.TotalMinutes < 421 || time.TimeOfDay.TotalMinutes > 1319)
+                {
+                    offset.Add(new TimeSpan(1,0,0));
+                }
+                else
+                {
+                    offset.Add(new TimeSpan(0, 5, 0));
+                }
+                var executionDateTime = new ExecutionDateTime()
+                {
+                    IsOnce = false,
+                    IsStop = false,
+                    ScheduledTime = time,
+                    ServiceMethodName = "ConfigProvider.ResetServiceExecutionTimes",
+                };
+                configTimes.Add(executionDateTime);
+            }
+            return configTimes;
         }
 
         protected void ResetServiceExecutionTimes(IEnumerable<ExecutionDateTime> newTimes)
