@@ -21,18 +21,18 @@ namespace ServiceScheduler
 
         protected void InsertExecutionTimes(IEnumerable<ExecutionDateTime> newTimes)
         {
-			foreach (var time in newTimes)
+			foreach (var newTime in newTimes)
 			{
 				var index = 0;
-				while (_executionTimes[index].ScheduledTime < time.ScheduledTime && index < _executionTimes.Count)
+				while ((_executionTimes[index]).ScheduledTime < newTime.ScheduledTime && index < _executionTimes.Count)
 				{
 					++index;
 				}
 				if (index < _executionTimes.Count) {
-					_executionTimes.Insert (index, time);
+					_executionTimes.Insert (index, newTime);
 				} else 
 				{
-					_executionTimes.Add (time);
+					_executionTimes.Add (newTime);
 				}
 			}
         }
@@ -77,7 +77,7 @@ namespace ServiceScheduler
 
         protected void RemoveServiceExecutionTimes()
         {
-			_executionTimes.RemoveAll(x => x.ServiceMethodName == "ConfigProvider.ResetServiceExecutionTimes");
+			_executionTimes.RemoveAll(x => x.ServiceMethodName != "ConfigProvider.ResetServiceExecutionTimes");
         }
 
         protected IEnumerable<ExecutionDateTime> LoadServiceExecutionTimes()
@@ -86,7 +86,7 @@ namespace ServiceScheduler
 			var executionTimes = new List<ExecutionDateTime>();
 			foreach (var dataSourceTime in dataSourceTimes)
 			{
-				executionTimes.Add (TimeStringConverter.Convert (dataSourceTime));
+				executionTimes.Add (_timeStringConverter.Convert (dataSourceTime));
 			}
 			return executionTimes;
         }
