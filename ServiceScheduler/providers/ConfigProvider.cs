@@ -7,11 +7,13 @@ namespace ServiceScheduler
 	{
 		protected List<ExecutionDateTime> _executionTimes;
 		protected IDataProvider _dataProvider;
+		protected ITimeStringConverter _timeStringConverter;
 		protected Func<DateTime> _dateTimeNow;
 
-		public ConfigProvider (IDataProvider dataProvider)
+		public ConfigProvider (IDataProvider dataProvider, ITimeStringConverter timeStringConverter)
 		{
 			_dataProvider = dataProvider;
+			_timeStringConverter = timeStringConverter;
 			_executionTimes = new List<ExecutionDateTime> ();
 			_dateTimeNow = () => DateTime.Now;
             InsertExecutionTimes(CreateResetConfigTimes());
@@ -19,27 +21,31 @@ namespace ServiceScheduler
 
         protected void InsertExecutionTimes(IEnumerable<ExecutionDateTime> newTimes)
         {
-            throw new NotImplementedException();
+			foreach (var time in newTimes)
+			{
+				var index = 0;
+				while (_executionTimes[index].ScheduledTime < time.ScheduledTime && index < _executionTimes.Count)
+				{
+					++index;
+				}
+				if (index < _executionTimes.Count) {
+					_executionTimes.Insert (index, time);
+				} else 
+				{
+					_executionTimes.Add (time);
+				}
+			}
         }
 
-        //22:00 till 08:00  every hour = 9 runs (exclusive)
-        //08:00 till 22:00 every 5 min = 168 runs (inclusive)
+        //22:00 till 08:00  every hour = 9 runs (excluding limits)
+        //08:00 till 22:00 every 5 min = 168 runs (including limits)
         protected IEnumerable<ExecutionDateTime> CreateResetConfigTimes()
         {
-            var smallStep = new TimeSpan(0, 5, 0);
             var configTimes = new List<ExecutionDateTime>();
-            var offset = new TimeSpan();
+			var offset = new TimeSpan(0, (3 - _dateTimeNow().Minute % 5) + 1, 0);  // linked to current Datetime, but the minutes are 04, 09, 14....
             for(var i = 0; i < 177; ++i)
             {
                 var time = _dateTimeNow().Add(offset);
-                if (time.TimeOfDay.TotalMinutes < 421 || time.TimeOfDay.TotalMinutes > 1319)
-                {
-                    offset.Add(new TimeSpan(1,0,0));
-                }
-                else
-                {
-                    offset.Add(new TimeSpan(0, 5, 0));
-                }
                 var executionDateTime = new ExecutionDateTime()
                 {
                     IsOnce = false,
@@ -47,7 +53,17 @@ namespace ServiceScheduler
                     ScheduledTime = time,
                     ServiceMethodName = "ConfigProvider.ResetServiceExecutionTimes",
                 };
+
                 configTimes.Add(executionDateTime);
+
+				if (time.TimeOfDay.TotalMinutes < 421 || time.TimeOfDay.TotalMinutes > 1319)
+				{
+					offset = offset.Add(new TimeSpan(1,0,0));
+				}
+				else
+				{
+					offset = offset.Add(new TimeSpan(0, 5, 0));
+				}
             }
             return configTimes;
         }
@@ -61,12 +77,18 @@ namespace ServiceScheduler
 
         protected void RemoveServiceExecutionTimes()
         {
-            throw new NotImplementedException();
+			_executionTimes.RemoveAll(x => x.ServiceMethodName == "ConfigProvider.ResetServiceExecutionTimes");
         }
 
         protected IEnumerable<ExecutionDateTime> LoadServiceExecutionTimes()
         {
-            throw new NotImplementedException();
+			var dataSourceTimes = _dataProvider.GetRecurrentTimes();
+			var executionTimes = new List<ExecutionDateTime>();
+			foreach (var dataSourceTime in dataSourceTimes)
+			{
+				executionTimes.Add (TimeStringConverter.Convert (dataSourceTime));
+			}
+			return executionTimes;
         }
 
         public ExecutionDateTime GetNextExecutionTime()
