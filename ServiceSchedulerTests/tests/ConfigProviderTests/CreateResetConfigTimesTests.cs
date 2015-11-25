@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
+using ServiceSchedulerTests.mocks;
 
 namespace ServiceSchedulerTests.tests.ConfigProviderTests
 {
@@ -11,7 +12,8 @@ namespace ServiceSchedulerTests.tests.ConfigProviderTests
         public void CheckAllConfigResetTimes()
         {
             var dataProvider = new DataProviderMockFactory().Create();
-            var objectUnderTest = new ConfigProviderWrapper(dataProvider)
+            var timeStringConverter = new TimeStringConverterMockFactory().Create();
+            var objectUnderTest = new ConfigProviderWrapper(dataProvider, timeStringConverter)
             {
                 Now = new DateTime(2015, 9, 15, 9, 34, 0),
             };

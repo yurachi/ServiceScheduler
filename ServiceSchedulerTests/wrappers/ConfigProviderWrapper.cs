@@ -6,7 +6,7 @@ namespace ServiceSchedulerTests
 {
 	public class ConfigProviderWrapper : ConfigProvider
 	{
-		public ConfigProviderWrapper (IDataProvider dataProvider) : base(dataProvider)
+		public ConfigProviderWrapper (IDataProvider dataProvider, ITimeStringConverter timeStringConverter) : base(dataProvider, timeStringConverter)
 		{
 			
 		}

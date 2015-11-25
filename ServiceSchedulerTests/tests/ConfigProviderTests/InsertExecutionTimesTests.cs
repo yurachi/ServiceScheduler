@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using ServiceScheduler;
+using ServiceSchedulerTests.mocks;
 using System.Linq;
 
 namespace ServiceSchedulerTests.tests.ConfigProviderTests
@@ -11,7 +12,8 @@ namespace ServiceSchedulerTests.tests.ConfigProviderTests
         public void InsertSingleTime()
         {
             var dataProvider = new DataProviderMockFactory().Create();
-            var objectUnderTest = new ConfigProviderWrapper(dataProvider);
+            var timeStringConverter = new TimeStringConverterMockFactory().Create();
+            var objectUnderTest = new ConfigProviderWrapper(dataProvider, timeStringConverter);
             var expected = new ExecutionDateTime()
             {
                 ScheduledTime = new System.DateTime(2015, 09, 14, 09, 34, 01),

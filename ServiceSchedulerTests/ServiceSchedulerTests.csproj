@@ -62,6 +62,7 @@
     <Compile Include="helpers\Assert.cs" />
     <Compile Include="mocks\BoolPropertyMockFactory.cs" />
     <Compile Include="mocks\ConfigProviderMockFactory.cs" />
+    <Compile Include="mocks\TimeStringConverterMockFactory.cs" />
     <Compile Include="tests\ConfigProviderTests\CreateResetConfigTimesTests.cs" />
     <Compile Include="tests\ConfigProviderTests\GetNextExecutionTimeTests.cs" />
     <Compile Include="tests\ConfigProviderTests\InsertExecutionTimesTests.cs" />

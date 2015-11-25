@@ -24,7 +24,7 @@ namespace ServiceScheduler
 			foreach (var newTime in newTimes)
 			{
 				var index = 0;
-				while ((_executionTimes[index]).ScheduledTime < newTime.ScheduledTime && index < _executionTimes.Count)
+				while (index < _executionTimes.Count && (_executionTimes[index]).ScheduledTime < newTime.ScheduledTime)
 				{
 					++index;
 				}
