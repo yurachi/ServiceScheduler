@@ -8,7 +8,8 @@ namespace ServiceScheduler
 		ExecutionDateTime GetNextExecutionTime();
 		TimeSpan GetMinimalTimeInterval ();
 		TimeSpan GetMinimalSleepInterval();
-        void ResetConfig();
+        void ResetServiceExecutionTimes();
+        void ResetConfigExecutionTimes();
 	}
 }
 

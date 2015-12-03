@@ -18,7 +18,12 @@ namespace ServiceSchedulerTests
 
         new public IEnumerable<ExecutionDateTime> CreateResetConfigTimes()
         {
-            return base.CreateResetConfigTimes();
+            return base.CreateResetServiceAndConfigExecutionTimes();
+        }
+
+        new public void RemoveServiceExecutionTimes()
+        {
+            base.RemoveServiceExecutionTimes();
         }
 
         public List<ExecutionDateTime> ExecutionTimes

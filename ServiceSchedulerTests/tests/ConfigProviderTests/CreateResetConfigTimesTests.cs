@@ -9,7 +9,7 @@ namespace ServiceSchedulerTests.tests.ConfigProviderTests
     public class CreateResetConfigTimesTests
     {
         [Test]
-        public void CheckAllConfigResetTimes()
+        public void CheckTotalNumberOfConfigResetTimes()
         {
             var dataProvider = new DataProviderMockFactory().Create();
             var timeStringConverter = new TimeStringConverterMockFactory().Create();
@@ -19,6 +19,20 @@ namespace ServiceSchedulerTests.tests.ConfigProviderTests
             };
             var actual = objectUnderTest.CreateResetConfigTimes();
             Assert.AreEqual(177, actual.Count());
+        }
+
+        [Test]
+        public void CheckFirstConfigResetTimes()
+        {
+            var dataProvider = new DataProviderMockFactory().Create();
+            var timeStringConverter = new TimeStringConverterMockFactory().Create();
+            var objectUnderTest = new ConfigProviderWrapper(dataProvider, timeStringConverter)
+            {
+                Now = new DateTime(2015, 9, 15, 9, 34, 0),
+            };
+            var expected = new DateTime(2015, 9, 15, 9, 34, 0);
+            var actual = objectUnderTest.CreateResetConfigTimes().First();
+            Assert.AreEqual(expected, actual.ServiceMethodName);
         }
     }
 }

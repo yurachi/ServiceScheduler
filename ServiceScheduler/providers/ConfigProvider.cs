@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Collections.Generic;
 
 namespace ServiceScheduler
@@ -16,7 +17,7 @@ namespace ServiceScheduler
 			_timeStringConverter = timeStringConverter;
 			_executionTimes = new List<ExecutionDateTime> ();
 			_dateTimeNow = () => DateTime.Now;
-            InsertExecutionTimes(CreateResetConfigTimes());
+            InsertExecutionTimes(CreateResetServiceAndConfigExecutionTimes());
 		}
 
         protected void InsertExecutionTimes(IEnumerable<ExecutionDateTime> newTimes)
@@ -29,8 +30,10 @@ namespace ServiceScheduler
 					++index;
 				}
 				if (index < _executionTimes.Count) {
-					_executionTimes.Insert (index, newTime);
-				} else 
+                    if(_executionTimes[index].ServiceMethodName != newTime.ServiceMethodName)
+					    _executionTimes.Insert (index, newTime);
+				}
+                else 
 				{
 					_executionTimes.Add (newTime);
 				}
@@ -39,7 +42,7 @@ namespace ServiceScheduler
 
         //22:00 till 08:00  every hour = 9 runs (excluding limits)
         //08:00 till 22:00 every 5 min = 168 runs (including limits)
-        protected IEnumerable<ExecutionDateTime> CreateResetConfigTimes()
+        protected IEnumerable<ExecutionDateTime> CreateResetServiceAndConfigExecutionTimes()
         {
             var configTimes = new List<ExecutionDateTime>();
 			var offset = new TimeSpan(0, (3 - _dateTimeNow().Minute % 5) + 1, 0);  // linked to current Datetime, but the minutes are 04, 09, 14....
@@ -65,19 +68,20 @@ namespace ServiceScheduler
 					offset = offset.Add(new TimeSpan(0, 5, 0));
 				}
             }
+            var nextCreateConfigTimesExecutionDateTime = new ExecutionDateTime()
+            {
+                IsOnce = false,
+                IsStop = false,
+                ScheduledTime = _dateTimeNow().Add(offset),
+                ServiceMethodName = "ConfigProvider.ResetConfigExecutionTimes",
+            };
             return configTimes;
         }
 
-        protected void ResetServiceExecutionTimes(IEnumerable<ExecutionDateTime> newTimes)
-		{
-            RemoveServiceExecutionTimes();
-            var serviceExecutionTimes = LoadServiceExecutionTimes();
-            InsertExecutionTimes(serviceExecutionTimes);
-		}
-
         protected void RemoveServiceExecutionTimes()
         {
-			_executionTimes.RemoveAll(x => x.ServiceMethodName != "ConfigProvider.ResetServiceExecutionTimes");
+            var configRegex = new Regex("ConfigProvider.Reset(Config|Service)ExecutionTimes");
+			_executionTimes.RemoveAll(x => !configRegex.IsMatch(x.ServiceMethodName));
         }
 
         protected IEnumerable<ExecutionDateTime> LoadServiceExecutionTimes()
@@ -94,9 +98,9 @@ namespace ServiceScheduler
         public ExecutionDateTime GetNextExecutionTime()
 		{
             //TODO: wait if Pause
-            //TODO: find nearest execution time in the collection
-            //TODO: in the case of conflict ConfigReread is low priority
-            throw new NotImplementedException();
+            var nextExecutionTime = _executionTimes.Find(x => x.ScheduledTime >= _dateTimeNow());
+            //TODO: in the case of conflict ConfigReread is low priority and should be moved back
+            return nextExecutionTime;
 		}
 
 		public TimeSpan GetMinimalTimeInterval()
@@ -112,9 +116,18 @@ namespace ServiceScheduler
 			return new TimeSpan(0,0,59); //59 seconds
 		}
 
-        public void ResetConfig()
+        public void ResetServiceExecutionTimes()
         {
-            throw new NotImplementedException();
+            var serviceExecutionTimes = LoadServiceExecutionTimes();
+            RemoveServiceExecutionTimes();
+            InsertExecutionTimes(serviceExecutionTimes);
+        }
+
+        public void ResetConfigExecutionTimes()
+        {
+            var resetServiceAndConfigExecutionTimes = CreateResetServiceAndConfigExecutionTimes();
+            _executionTimes.Clear();
+            _executionTimes.AddRange(resetServiceAndConfigExecutionTimes);
         }
     }
 }
