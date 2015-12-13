@@ -32,7 +32,7 @@ namespace ServiceSchedulerTests.tests.ConfigProviderTests
             };
             var expected = new DateTime(2015, 9, 15, 9, 34, 0);
             var actual = objectUnderTest.CreateResetConfigTimes().First();
-            Assert.AreEqual(expected, actual.ServiceMethodName);
+            Assert.AreEqual(expected, actual.ScheduledTime);
         }
     }
 }

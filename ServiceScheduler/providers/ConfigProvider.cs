@@ -30,8 +30,15 @@ namespace ServiceScheduler
 					++index;
 				}
 				if (index < _executionTimes.Count) {
-                    if(_executionTimes[index].ServiceMethodName != newTime.ServiceMethodName)
-					    _executionTimes.Insert (index, newTime);
+                    if (_executionTimes[index].ServiceMethodName != newTime.ServiceMethodName)
+                    {
+                        _executionTimes.Insert(index, newTime);
+                    } 
+                    else if ((newTime.IsStop) && (newTime.ScheduledTime == _executionTimes[index].ScheduledTime))
+                    {
+                        _executionTimes.RemoveAt(index);
+                        _executionTimes.Insert(index, newTime);
+                    }
 				}
                 else 
 				{

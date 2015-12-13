@@ -44,6 +44,7 @@ namespace ServiceSchedulerTests
 			set
 			{
 				_dateTimeNow = () => value;
+                base.ResetConfigExecutionTimes();
 			}	
 		}
 	}

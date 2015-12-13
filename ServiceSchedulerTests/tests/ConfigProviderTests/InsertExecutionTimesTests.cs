@@ -32,27 +32,31 @@ namespace ServiceSchedulerTests.tests.ConfigProviderTests
         {
             var dataProvider = new DataProviderMockFactory().Create();
             var timeStringConverter = new TimeStringConverterMockFactory().Create();
-            var objectUnderTest = new ConfigProviderWrapper(dataProvider, timeStringConverter);
+            var objectUnderTest = new ConfigProviderWrapper(dataProvider, timeStringConverter)
+            {
+                Now = new System.DateTime(2015, 09, 14, 09, 30, 01),
+            };
+            var methodName = "Insert3Times";
             var expected = new ExecutionDateTime()
             {
-                ScheduledTime = new System.DateTime(2015, 09, 14, 09, 34, 01),
-                ServiceMethodName = "Insert3Times",
+                ScheduledTime = new System.DateTime(2015, 09, 14, 09, 33, 01),
+                ServiceMethodName = methodName,
             };
             var expectedLess1min = new ExecutionDateTime()
             {
-                ScheduledTime = new System.DateTime(2015, 09, 14, 09, 33, 01),
-                ServiceMethodName = "Insert3Times",
+                ScheduledTime = new System.DateTime(2015, 09, 14, 09, 32, 01),
+                ServiceMethodName = methodName,
             };
 
             var expectedPlus24h = new ExecutionDateTime()
             {
                 ScheduledTime = new System.DateTime(2015, 09, 15, 09, 34, 01),
-                ServiceMethodName = "Insert3Times",
+                ServiceMethodName = methodName,
             };
 
             objectUnderTest.InsertExecutionTimes(new[] { expectedPlus24h, expectedLess1min, expected});
 
-            var actual = objectUnderTest.ExecutionTimes.Where(x => x.ServiceMethodName == expected.ServiceMethodName).ElementAt(1);
+            var actual = objectUnderTest.ExecutionTimes.ElementAt(1);
 
             Assert.AreEqual(expected, actual);
         }
@@ -68,17 +72,42 @@ namespace ServiceSchedulerTests.tests.ConfigProviderTests
                 ScheduledTime = new System.DateTime(2015, 09, 14, 09, 34, 01),
                 ServiceMethodName = "Insert2IdenticalTimes",
             };
-            var expectedLess1min = new ExecutionDateTime()
+            var unexpected = new ExecutionDateTime()
             {
                 ScheduledTime = new System.DateTime(2015, 09, 14, 09, 34, 01),
                 ServiceMethodName = "Insert2IdenticalTimes"
             };
 
-            objectUnderTest.InsertExecutionTimes(new[] { expected, expectedLess1min });
+            objectUnderTest.InsertExecutionTimes(new[] { expected, unexpected });
 
             var actual = objectUnderTest.ExecutionTimes.Where(x => x.ServiceMethodName == expected.ServiceMethodName).Single();
 
             Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void Insert2SameTimesOneStopper()
+        {
+            var dataProvider = new DataProviderMockFactory().Create();
+            var timeStringConverter = new TimeStringConverterMockFactory().Create();
+            var objectUnderTest = new ConfigProviderWrapper(dataProvider, timeStringConverter);
+            var expected = new ExecutionDateTime()
+            {
+                ScheduledTime = new System.DateTime(2015, 09, 14, 09, 34, 01),
+                ServiceMethodName = "Insert2IdenticalTimes",
+            };
+            var expectedWithStop = new ExecutionDateTime()
+            {
+                ScheduledTime = new System.DateTime(2015, 09, 14, 09, 34, 01),
+                ServiceMethodName = "Insert2IdenticalTimes",
+                IsStop = true,
+            };
+
+            objectUnderTest.InsertExecutionTimes(new[] { expected, expectedWithStop });
+
+            var actual = objectUnderTest.ExecutionTimes.Where(x => x.ServiceMethodName == expected.ServiceMethodName).Single();
+
+            Assert.AreEqual(expectedWithStop, actual, "Expected time with Stop flag missing");
         }
     }
 }
