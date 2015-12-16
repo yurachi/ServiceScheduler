@@ -58,7 +58,7 @@ namespace ServiceSchedulerTests.tests.ConfigProviderTests
 
             var actual = objectUnderTest.ExecutionTimes.ElementAt(1);
 
-            Assert.AreEqual(expected, actual);
+            Assert.AreEqual(expected, actual, string.Format("Mismatched time: expected:{0}, actual:{1}", expected.ScheduledTime, actual.ScheduledTime));
         }
 
         [Test]
