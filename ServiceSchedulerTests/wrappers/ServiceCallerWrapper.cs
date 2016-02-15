@@ -13,11 +13,6 @@ namespace ServiceSchedulerTests.wrappers
             MainLoopRunningMock = factory.Create();
         }
 
-        new public TimeSpan CalculateAbsoluteTimeDifference(DateTime scheduledTime)
-        {
-            return base.CalculateAbsoluteTimeDifference(scheduledTime);
-        }
-
         public DateTime Now
         {
             set

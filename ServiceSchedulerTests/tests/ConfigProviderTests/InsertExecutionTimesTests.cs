@@ -40,7 +40,7 @@ namespace ServiceSchedulerTests.tests.ConfigProviderTests
             };
             var expectedLess1min = new ExecutionDateTime()
             {
-                ScheduledTime = new System.DateTime(2015, 09, 14, 09, 33, 01),
+                ScheduledTime = new System.DateTime(2015, 09, 14, 09, 32, 01),
                 ServiceMethodName = "Insert3Times",
             };
 

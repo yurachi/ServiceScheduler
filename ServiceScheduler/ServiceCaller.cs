@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ServiceScheduler.providers;
+using System;
 using System.Threading;
 
 namespace ServiceScheduler
@@ -25,7 +26,7 @@ namespace ServiceScheduler
             while (MainLoopRunning)
 			{
                 nextExecutionTime = _configProvider.GetNextExecutionTime();
-                if (CalculateAbsoluteTimeDifference(nextExecutionTime.ScheduledTime) < _configProvider.GetMinimalTimeInterval ()) 
+                if(UtilityProvider.CalculateAbsoluteTimeDifference(nextExecutionTime.ScheduledTime, _dateTimeNow()) < _configProvider.GetMinimalTimeInterval ()) 
 				{
                     if (nextExecutionTime.IsOnce)
                         nextExecutionTime.Remove();
@@ -37,14 +38,6 @@ namespace ServiceScheduler
 				}
 			}
 		}
-
-        protected TimeSpan CalculateAbsoluteTimeDifference(DateTime scheduledTime)
-        {
-            if (scheduledTime > _dateTimeNow())
-                return scheduledTime.Subtract(_dateTimeNow());
-            else
-                return _dateTimeNow().Subtract(scheduledTime);
-        }
 
         public virtual bool MainLoopRunning { get; set; } //TODO: make it Synchronised<bool>
     }

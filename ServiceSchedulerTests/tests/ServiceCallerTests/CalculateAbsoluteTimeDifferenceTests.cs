@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using ServiceScheduler.providers;
 using ServiceSchedulerTests.mocks;
 using ServiceSchedulerTests.wrappers;
 using System;
@@ -14,12 +15,10 @@ namespace ServiceSchedulerTests.tests.ServiceCallerTests
         [TestCase("02:03:00", "00:02 09-Sep-2015", "21:59 08-Sep-2015")]
         public void CheckTimeDifference(string expected, string scheduled, string now)
         {
-            var configProvider = new ConfigProviderMockFactory().Create();
-            var objectUnderTest = new ServiceCallerWrapper(configProvider);
             var scheduledDateTime = DateTime.Parse(scheduled, CultureInfo.CreateSpecificCulture("en-UK"), DateTimeStyles.NoCurrentDateDefault);
-            objectUnderTest.Now = DateTime.Parse(now, CultureInfo.CreateSpecificCulture("en-UK"), DateTimeStyles.NoCurrentDateDefault);
+            var nowTime = DateTime.Parse(now, CultureInfo.CreateSpecificCulture("en-UK"), DateTimeStyles.NoCurrentDateDefault);
 
-            var actual = objectUnderTest.CalculateAbsoluteTimeDifference(scheduledDateTime);
+            var actual = UtilityProvider.CalculateAbsoluteTimeDifference(scheduledDateTime, nowTime);
 
             Assert.AreEqual(expected, actual.ToString());
         }

@@ -17,7 +17,7 @@ namespace ServiceSchedulerTests.tests.ConfigProviderTests
             {
                 Now = new DateTime(2015, 9, 15, 9, 34, 0),
             };
-            var actual = objectUnderTest.CreateResetConfigTimes();
+            var actual = objectUnderTest.CreateResetServiceAndConfigExecutionTimes();
             Assert.AreEqual(177, actual.Count());
         }
 
@@ -31,8 +31,8 @@ namespace ServiceSchedulerTests.tests.ConfigProviderTests
                 Now = new DateTime(2015, 9, 15, 9, 34, 0),
             };
             var expected = new DateTime(2015, 9, 15, 9, 34, 0);
-            var actual = objectUnderTest.CreateResetConfigTimes().First();
-            Assert.AreEqual(expected, actual.ServiceMethodName);
+            var actual = objectUnderTest.CreateResetServiceAndConfigExecutionTimes().First();
+            Assert.AreEqual(expected, actual.ScheduledTime);
         }
     }
 }
