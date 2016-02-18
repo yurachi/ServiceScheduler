@@ -80,5 +80,47 @@ namespace ServiceSchedulerTests.tests.ConfigProviderTests
 
             Assert.AreEqual(expected, actual);
         }
+
+        [Test]
+        public void InsertDayOff()
+        {
+            var dataProvider = new DataProviderMockFactory().Create();
+            var timeStringConverter = new TimeStringConverterMockFactory().Create();
+            var objectUnderTest = new ConfigProviderWrapper(dataProvider, timeStringConverter)
+            {
+                Now = new System.DateTime(2015, 09, 14, 09, 30, 01),
+            };
+
+            var expected = new ExecutionDateTime()
+            {
+                IsStop = true,
+                IsOnce = true,
+                ServiceMethodName = "InsertDayOff",
+            };
+
+            var execTime = new ExecutionDateTime()
+            {
+                ScheduledTime = new System.DateTime(2015, 09, 14, 09, 34, 01),
+                ServiceMethodName = "InsertDayOff",
+            };
+            var execLess2min = new ExecutionDateTime()
+            {
+                ScheduledTime = new System.DateTime(2015, 09, 14, 09, 32, 01),
+                ServiceMethodName = "InsertDayOff",
+            };
+
+            var execPlus24h = new ExecutionDateTime()
+            {
+                ScheduledTime = new System.DateTime(2015, 09, 15, 09, 34, 01),
+                ServiceMethodName = "InsertDayOff",
+            };
+
+            objectUnderTest.InsertExecutionTimes(new[] {execTime, expected, execLess2min, execPlus24h});
+
+            var actual = objectUnderTest.ExecutionTimes.Where(x => x.ServiceMethodName == expected.ServiceMethodName).First();
+
+            Assert.AreEqual(expected, actual);
+            Assert.AreEqual(2, objectUnderTest.ExecutionTimes.Where(x => x.ServiceMethodName == expected.ServiceMethodName).Count());
+        }
     }
 }

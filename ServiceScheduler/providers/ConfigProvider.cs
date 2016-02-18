@@ -30,7 +30,8 @@ namespace ServiceScheduler
 				{
 					++index;
 				}
-				if (index < _executionTimes.Count) {
+				if (index < _executionTimes.Count)
+                {
                     if(_executionTimes[index].ServiceMethodName != newTime.ServiceMethodName ||
                         UtilityProvider.CalculateAbsoluteTimeDifference(
                             _executionTimes[index].ScheduledTime, 
