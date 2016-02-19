@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
-using ServiceScheduler.providers;
 
 namespace ServiceScheduler
 {
@@ -23,25 +22,28 @@ namespace ServiceScheduler
 
         protected void InsertExecutionTimes(IEnumerable<ExecutionDateTime> newTimes)
         {
-			foreach (var newTime in newTimes)
+            var index = 0;
+            foreach (var newTime in newTimes)
 			{
-				var index = 0;
-				while (index < _executionTimes.Count && (_executionTimes[index]).ScheduledTime < newTime.ScheduledTime)
-				{
-					++index;
-				}
-				if (index < _executionTimes.Count)
+                while (index < _executionTimes.Count && (_executionTimes[index]).ScheduledTime < newTime.ScheduledTime)
                 {
-                    if(_executionTimes[index].ServiceMethodName != newTime.ServiceMethodName ||
-                        UtilityProvider.CalculateAbsoluteTimeDifference(
-                            _executionTimes[index].ScheduledTime, 
-                            newTime.ScheduledTime) > GetMinimalTimeInterval())
-					    _executionTimes.Insert (index, newTime);
-				}
-                else 
-				{
-					_executionTimes.Add (newTime);
-				}
+                    ++index;
+                }
+                if (index < _executionTimes.Count) {
+                    if (_executionTimes[index].ServiceMethodName != newTime.ServiceMethodName)
+                    {
+                        _executionTimes.Insert(index, newTime);
+                    }
+                    else if ((newTime.IsStop) && (newTime.ScheduledTime == _executionTimes[index].ScheduledTime))
+                    {
+                        _executionTimes.RemoveAt(index);
+                        _executionTimes.Insert(index, newTime);
+                    }
+                }
+                else
+                {
+                    _executionTimes.Add(newTime);
+                }
 			}
         }
 
