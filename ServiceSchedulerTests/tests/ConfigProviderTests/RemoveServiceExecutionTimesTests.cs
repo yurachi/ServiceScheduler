@@ -17,12 +17,12 @@ namespace ServiceSchedulerTests.tests.ConfigProviderTests
             var serviceExecutionDateTime = new ExecutionDateTime()
             {
                 ScheduledTime = new System.DateTime(2015, 09, 15, 09, 29, 01),
-                ServiceMethodName = "ServiceProvider.ResetConfigExecutionTimes",
+                ServiceName = "ServiceProvider.ResetConfigExecutionTimes",
             };
             var expected = new ExecutionDateTime()
             {
                 ScheduledTime = new System.DateTime(2015, 09, 15, 09, 29, 01),
-                ServiceMethodName = "ConfigProvider.ResetConfigExecutionTimes",
+                ServiceName = "ConfigProvider.ResetConfigExecutionTimes",
             };
             var objectUnderTest = new ConfigProviderWrapper(dataProvider, timeStringConverter)
             {
@@ -45,17 +45,17 @@ namespace ServiceSchedulerTests.tests.ConfigProviderTests
             var serviceProviderExecutionDateTime = new ExecutionDateTime()
             {
                 ScheduledTime = new System.DateTime(2015, 09, 15, 09, 29, 01),
-                ServiceMethodName = "ServiceProvider.ResetServiceExecutionTimes",
+                ServiceName = "ServiceProvider.ResetServiceExecutionTimes",
             };
             var serviceExecutionDateTime = new ExecutionDateTime()
             {
                 ScheduledTime = new System.DateTime(2015, 09, 15, 09, 29, 01),
-                ServiceMethodName = "Service.WorkerMethod",
+                ServiceName = "Service.WorkerMethod",
             };
             var expected = new ExecutionDateTime()
             {
                 ScheduledTime = new System.DateTime(2015, 09, 15, 09, 29, 01),
-                ServiceMethodName = "ConfigProvider.ResetServiceExecutionTimes",
+                ServiceName = "ConfigProvider.ResetServiceExecutionTimes",
             };
             var objectUnderTest = new ConfigProviderWrapper(dataProvider, timeStringConverter)
             {
@@ -71,14 +71,14 @@ namespace ServiceSchedulerTests.tests.ConfigProviderTests
         }
 
         [Test]
-        public void CheckServiceExecutionTimesGoes()
+        public void CheckServiceExecutionTimesRemoved()
         {
             var dataProvider = new DataProviderMockFactory().Create();
             var timeStringConverter = new TimeStringConverterMockFactory().Create();
             var serviceExecutionDateTime = new ExecutionDateTime()
             {
                 ScheduledTime = new System.DateTime(2015, 09, 15, 09, 29, 01),
-                ServiceMethodName = "ServiceProvider.ResetServiceExecutionTimes",
+                ServiceName = "ServiceProvider.ResetServiceExecutionTimes",
             };
             var objectUnderTest = new ConfigProviderWrapper(dataProvider, timeStringConverter)
             {

@@ -23,9 +23,10 @@ namespace ServiceScheduler
 			{
 				IsOnce = sourceTime.IsOnce,
                 IsStop = sourceTime.IsStop,
+                IsWholeDay = sourceTime.IsWholeDay,
 				Remove = sourceTime.Remove,
 				ScheduledTime = parsedDateTime,
-                ServiceMethodName = sourceTime.ServiceMethodName,
+                ServiceName = sourceTime.ServiceName,
 			};
 			return scheduled;
 		}
@@ -34,10 +35,14 @@ namespace ServiceScheduler
 		{
             DateTime result;
 
-            var parsedTime = DateTime.Parse(
-                timeString, 
-                CultureInfo.CreateSpecificCulture("en-UK"), 
+            var parsedTime = _dateTimeNow();
+            if (!string.IsNullOrWhiteSpace(timeString))
+            {
+                parsedTime = DateTime.Parse(
+                timeString,
+                CultureInfo.CreateSpecificCulture("en-UK"),
                 DateTimeStyles.NoCurrentDateDefault);
+            }
 
             result = _dateTimeNow().Date
                 .Add(parsedTime.TimeOfDay)

@@ -22,15 +22,21 @@ namespace ServiceScheduler
 
         protected void InsertExecutionTimes(IEnumerable<ExecutionDateTime> newTimes)
         {
-            var index = 0;
             foreach (var newTime in newTimes)
 			{
+                if(newTime.IsStop && newTime.IsWholeDay)
+                {
+                    newTime.ScheduledTime = newTime.ScheduledTime.Date;
+                    RemoveServiceExecutionTimes(newTime);
+                }
+                var index = 0;
                 while (index < _executionTimes.Count && (_executionTimes[index]).ScheduledTime < newTime.ScheduledTime)
                 {
                     ++index;
                 }
-                if (index < _executionTimes.Count) {
-                    if (_executionTimes[index].ServiceMethodName != newTime.ServiceMethodName)
+                if (index < _executionTimes.Count)
+                {
+                    if (_executionTimes[index].ServiceName != newTime.ServiceName)
                     {
                         _executionTimes.Insert(index, newTime);
                     }
@@ -60,8 +66,9 @@ namespace ServiceScheduler
                 {
                     IsOnce = false,
                     IsStop = false,
+                    IsWholeDay = false,
                     ScheduledTime = time,
-                    ServiceMethodName = "ConfigProvider.ResetServiceExecutionTimes",
+                    ServiceName = "ConfigProvider.ResetServiceExecutionTimes",
                 };
 
                 configTimes.Add(executionDateTime);
@@ -79,16 +86,30 @@ namespace ServiceScheduler
             {
                 IsOnce = false,
                 IsStop = false,
+                IsWholeDay = false,
                 ScheduledTime = _dateTimeNow().Add(offset),
-                ServiceMethodName = "ConfigProvider.ResetConfigExecutionTimes",
+                ServiceName = "ConfigProvider.ResetConfigExecutionTimes",
             };
             return configTimes;
         }
 
         protected void RemoveServiceExecutionTimes()
         {
-            var configRegex = new Regex("ConfigProvider.Reset(Config|Service)ExecutionTimes");
-			_executionTimes.RemoveAll(x => !configRegex.IsMatch(x.ServiceMethodName));
+            var configRegex = new Regex("ConfigProvider.Reset(Config|Service|All)ExecutionTimes");
+			_executionTimes.RemoveAll(x => !configRegex.IsMatch(x.ServiceName));
+        }
+
+        protected void RemoveServiceExecutionTimes(ExecutionDateTime wholeDayStopper)
+        {
+            _executionTimes.RemoveAll(
+                x => x.ServiceName.Equals(wholeDayStopper.ServiceName)&&
+                     x.ScheduledTime.Date.Equals(wholeDayStopper.ScheduledTime.Date));
+        }
+
+        protected void RemoveConfigExecutionTimes()
+        {
+            var configRegex = new Regex("ConfigProvider.Reset(Config|Service|All)ExecutionTimes");
+            _executionTimes.RemoveAll(x => configRegex.IsMatch(x.ServiceName));
         }
 
         protected IEnumerable<ExecutionDateTime> LoadServiceExecutionTimes()
@@ -131,6 +152,13 @@ namespace ServiceScheduler
         }
 
         public void ResetConfigExecutionTimes()
+        {
+            var configExecutionTimes = LoadServiceExecutionTimes();
+            RemoveConfigExecutionTimes();
+            InsertExecutionTimes(configExecutionTimes);
+        }
+
+        public void ResetAllExecutionTimes()
         {
             var resetServiceAndConfigExecutionTimes = CreateResetServiceAndConfigExecutionTimes();
             _executionTimes.Clear();
