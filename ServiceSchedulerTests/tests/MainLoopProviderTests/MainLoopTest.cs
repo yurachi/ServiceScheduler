@@ -28,6 +28,7 @@ namespace ServiceSchedulerTests.tests.ServiceCallerTests
                 new ExecutionDateTime()
                 {
                     ScheduledTime = scheduledDateTime,
+                    ServiceClassName = workerName,
                 });
 
             workerFactory.AddWorker(workerName, () => { actualDoWorkCalled = true; }, () => { }, (ex) => { });
@@ -61,7 +62,7 @@ namespace ServiceSchedulerTests.tests.ServiceCallerTests
                 {
                     IsOnce = isOnce,
                     ScheduledTime = scheduledDateTime,
-                    Remove = () => { actualRemoveCalled = true; }
+                    Remove = () => { actualRemoveCalled = true; },
                 });
 
             workerFactory.AddWorker(workerName, () => { }, () => { }, (ex) => { });
@@ -74,6 +75,67 @@ namespace ServiceSchedulerTests.tests.ServiceCallerTests
             objectUnderTest.MainLoop();
 
             Assert.AreEqual(expectedRemoveCalled, actualRemoveCalled);
+        }
+
+        [TestCase(true, "2015-Sep-15 09:34", "2015-Sep-15 09:34")]
+        [TestCase(false, "2015-Sep-15 09:34", "2015-Sep-15 09:34")]
+        public void WhenTimeMatchingScheduledActionThrowsHandleCalled(bool expectedHandleCalled, string current, string scheduled)
+        {
+            var currentDateTime = DateTime.Parse(current);
+            var scheduledDateTime = DateTime.Parse(scheduled);
+            var configFactory = new ConfigProviderMockFactory();
+            var workerFactory = new WorkerProviderMockFactory();
+            var workerName = "TestWorker";
+            var actualHandleCalled = false;
+
+            configFactory.SetNextExecutionTimeReturn(
+                new ExecutionDateTime()
+                {
+                    ScheduledTime = scheduledDateTime,
+                    ServiceClassName = workerName,
+                });
+
+            workerFactory.AddWorker(workerName, () => { if (expectedHandleCalled) throw new Exception(); }, () => { }, (ex) => { actualHandleCalled = true; });
+
+            var objectUnderTest = new MainLoopProviderWrapper(configFactory.Create(), workerFactory.Create())
+            {
+                Now = currentDateTime,
+            };
+
+            objectUnderTest.MainLoop();
+
+            Assert.AreEqual(expectedHandleCalled, actualHandleCalled);
+        }
+
+        [Test]
+        public void AfterMainLoopStopCalled()
+        {
+            
+            var currentDateTime = DateTime.Parse("2015-Sep-15 09:34");
+            var scheduledDateTime = DateTime.Parse("2015-Sep-15 09:34");
+            var configFactory = new ConfigProviderMockFactory();
+            var workerFactory = new WorkerProviderMockFactory();
+            var workerName = "TestWorker";
+            var expectedStopCalled = true;
+            var actualStopCalled = false;
+
+            configFactory.SetNextExecutionTimeReturn(
+                new ExecutionDateTime()
+                {
+                    ScheduledTime = scheduledDateTime,
+                    ServiceClassName = workerName,
+                });
+
+            workerFactory.AddWorker(workerName, () => { }, () => { actualStopCalled = true; }, (ex) => { });
+
+            var objectUnderTest = new MainLoopProviderWrapper(configFactory.Create(), workerFactory.Create())
+            {
+                Now = currentDateTime,
+            };
+
+            objectUnderTest.MainLoop();
+
+            Assert.AreEqual(expectedStopCalled, actualStopCalled);
         }
     }
 }
