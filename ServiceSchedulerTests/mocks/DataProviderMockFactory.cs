@@ -1,10 +1,9 @@
-﻿using System;
-using NSubstitute;
+﻿using NSubstitute;
 using ServiceScheduler;
 
 namespace ServiceSchedulerTests
 {
-	public class DataProviderMockFactory
+    public class DataProviderMockFactory
 	{
 		private IDataProvider _dataProviderMock;
 

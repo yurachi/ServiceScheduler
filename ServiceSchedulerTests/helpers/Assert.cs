@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using ServiceScheduler;
-using System;
 using System.Text;
 
 namespace ServiceSchedulerTests.helpers

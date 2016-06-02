@@ -1,5 +1,4 @@
-﻿using ServiceScheduler;
-using ServiceScheduler.interfaces;
+﻿using ServiceScheduler.interfaces;
 using ServiceScheduler.providers;
 using ServiceSchedulerTests.mocks;
 using System;

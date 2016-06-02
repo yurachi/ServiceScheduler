@@ -1,11 +1,10 @@
 using System;
-using System.Linq;
 using System.Globalization;
 using ServiceScheduler.datamodels;
 
 namespace ServiceScheduler
 {
-	public class TimeStringConverter : ITimeStringConverter
+    public class TimeStringConverter : ITimeStringConverter
 	{
 		protected Func<DateTime> _dateTimeNow;
 

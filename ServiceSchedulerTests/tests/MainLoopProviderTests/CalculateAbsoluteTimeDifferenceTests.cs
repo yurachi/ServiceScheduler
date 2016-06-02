@@ -1,7 +1,5 @@
 ﻿using NUnit.Framework;
 using ServiceScheduler.providers;
-using ServiceSchedulerTests.mocks;
-using ServiceSchedulerTests.wrappers;
 using System;
 using System.Globalization;
 

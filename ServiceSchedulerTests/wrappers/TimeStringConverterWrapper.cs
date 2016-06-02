@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using ServiceScheduler;
 
 namespace ServiceSchedulerTests
 {
-	public class TimeStringConverterWrapper : TimeStringConverter
+    public class TimeStringConverterWrapper : TimeStringConverter
 	{
 		new public DateTime ParseTime(string timeString, string dayOfWeek)
 		{
