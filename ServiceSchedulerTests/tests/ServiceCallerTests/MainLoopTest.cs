@@ -20,6 +20,8 @@ namespace ServiceSchedulerTests.tests.ServiceCallerTests
             var currentDateTime = DateTime.Parse(current);
             var scheduledDateTime = DateTime.Parse(scheduled);
             var configFactory = new ConfigProviderMockFactory();
+            var workerFactory = new WorkerProviderMockFactory();
+            var workerName = "TestWorker";
             var actualDoWorkCalled = false;
 
             configFactory.SetNextExecutionTimeReturn(
@@ -28,12 +30,14 @@ namespace ServiceSchedulerTests.tests.ServiceCallerTests
                     ScheduledTime = scheduledDateTime,
                 });
 
-            var objectUnderTest = new ServiceCallerWrapper(configFactory.Create())
+            workerFactory.AddWorker(workerName, () => { actualDoWorkCalled = true; }, () => { }, (ex) => { });
+
+            var objectUnderTest = new MainLoopProviderWrapper(configFactory.Create(), workerFactory.Create())
             {
                 Now = currentDateTime,
             };
 
-            objectUnderTest.MainLoop(() => { actualDoWorkCalled = true; });
+            objectUnderTest.MainLoop();
 
             Assert.AreEqual(expectedDoWorkCalled, actualDoWorkCalled);
         }
@@ -48,6 +52,8 @@ namespace ServiceSchedulerTests.tests.ServiceCallerTests
             var currentDateTime = DateTime.Parse(current);
             var scheduledDateTime = DateTime.Parse(scheduled);
             var configFactory = new ConfigProviderMockFactory();
+            var workerFactory = new WorkerProviderMockFactory();
+            var workerName = "TestWorker";
             var actualRemoveCalled = false;
 
             configFactory.SetNextExecutionTimeReturn(
@@ -58,12 +64,14 @@ namespace ServiceSchedulerTests.tests.ServiceCallerTests
                     Remove = () => { actualRemoveCalled = true; }
                 });
 
-            var objectUnderTest = new ServiceCallerWrapper(configFactory.Create())
+            workerFactory.AddWorker(workerName, () => { }, () => { }, (ex) => { });
+
+            var objectUnderTest = new MainLoopProviderWrapper(configFactory.Create(), workerFactory.Create())
             {
                 Now = currentDateTime,
             };
 
-            objectUnderTest.MainLoop(() => { });
+            objectUnderTest.MainLoop();
 
             Assert.AreEqual(expectedRemoveCalled, actualRemoveCalled);
         }

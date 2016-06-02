@@ -6,7 +6,7 @@ namespace ServiceScheduler.datamodels
     {
         public string ScheduledTime { get; set; }
         public string DayOfWeek { get; set; }
-        public string ServiceMethodName { get; set; }
+        public string ServiceClassName { get; set; }
         public bool IsStop { get; set; }
         public bool IsOnce { get; set; }
         public Action Remove { get; set; }

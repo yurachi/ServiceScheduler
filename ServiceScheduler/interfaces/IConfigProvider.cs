@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace ServiceScheduler
+namespace ServiceScheduler.interfaces
 {
-	public interface IConfigProvider
+    public interface IConfigProvider
 	{
 		ExecutionDateTime GetNextExecutionTime();
 		TimeSpan GetMinimalTimeInterval ();

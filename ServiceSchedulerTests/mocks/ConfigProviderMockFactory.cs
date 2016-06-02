@@ -1,10 +1,11 @@
 ﻿using System;
 using NSubstitute;
 using ServiceScheduler;
+using ServiceScheduler.interfaces;
 
 namespace ServiceSchedulerTests.mocks
 {
-    public class ConfigProviderMockFactory
+    class ConfigProviderMockFactory
     {
         private IConfigProvider _configProviderMock;
         private TimeSpan _minimalTimeInterval;

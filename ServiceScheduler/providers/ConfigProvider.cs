@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using ServiceScheduler.interfaces;
 
 namespace ServiceScheduler
 {
@@ -30,7 +31,7 @@ namespace ServiceScheduler
                     ++index;
                 }
                 if (index < _executionTimes.Count) {
-                    if (_executionTimes[index].ServiceMethodName != newTime.ServiceMethodName)
+                    if (_executionTimes[index].ServiceClassName != newTime.ServiceClassName)
                     {
                         _executionTimes.Insert(index, newTime);
                     }
@@ -61,7 +62,7 @@ namespace ServiceScheduler
                     IsOnce = false,
                     IsStop = false,
                     ScheduledTime = time,
-                    ServiceMethodName = "ConfigProvider.ResetServiceExecutionTimes",
+                    ServiceClassName = "ConfigProvider",
                 };
 
                 configTimes.Add(executionDateTime);
@@ -80,15 +81,15 @@ namespace ServiceScheduler
                 IsOnce = false,
                 IsStop = false,
                 ScheduledTime = _dateTimeNow().Add(offset),
-                ServiceMethodName = "ConfigProvider.ResetConfigExecutionTimes",
+                ServiceClassName = "ConfigProvider",
             };
             return configTimes;
         }
 
         protected void RemoveServiceExecutionTimes()
         {
-            var configRegex = new Regex("ConfigProvider.Reset(Config|Service)ExecutionTimes");
-			_executionTimes.RemoveAll(x => !configRegex.IsMatch(x.ServiceMethodName));
+            var configRegex = new Regex("ConfigProvide");
+			_executionTimes.RemoveAll(x => !configRegex.IsMatch(x.ServiceClassName));
         }
 
         protected IEnumerable<ExecutionDateTime> LoadServiceExecutionTimes()

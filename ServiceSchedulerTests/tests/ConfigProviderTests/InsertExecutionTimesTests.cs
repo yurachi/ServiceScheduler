@@ -17,12 +17,12 @@ namespace ServiceSchedulerTests.tests.ConfigProviderTests
             var expected = new ExecutionDateTime()
             {
                 ScheduledTime = new System.DateTime(2015, 09, 14, 09, 34, 01),
-                ServiceMethodName = "InsertSingleTime",
+                ServiceClassName = "InsertSingleTime",
             };
 
             objectUnderTest.InsertExecutionTimes(new[] { expected });
 
-            var actual = objectUnderTest.ExecutionTimes.Where(x => x.ServiceMethodName == expected.ServiceMethodName).Single();
+            var actual = objectUnderTest.ExecutionTimes.Where(x => x.ServiceClassName == expected.ServiceClassName).Single();
 
             Assert.AreEqual(expected, actual);
         }
@@ -40,18 +40,18 @@ namespace ServiceSchedulerTests.tests.ConfigProviderTests
             var expected = new ExecutionDateTime()
             {
                 ScheduledTime = new System.DateTime(2015, 09, 14, 09, 33, 01),
-                ServiceMethodName = methodName,
+                ServiceClassName = methodName,
             };
             var expectedLess1min = new ExecutionDateTime()
             {
                 ScheduledTime = new System.DateTime(2015, 09, 14, 09, 32, 01),
-                ServiceMethodName = methodName,
+                ServiceClassName = methodName,
             };
 
             var expectedPlus24h = new ExecutionDateTime()
             {
                 ScheduledTime = new System.DateTime(2015, 09, 15, 09, 34, 01),
-                ServiceMethodName = methodName,
+                ServiceClassName = methodName,
             };
 
             objectUnderTest.InsertExecutionTimes(new[] { expectedPlus24h, expectedLess1min, expected});
@@ -70,17 +70,17 @@ namespace ServiceSchedulerTests.tests.ConfigProviderTests
             var expected = new ExecutionDateTime()
             {
                 ScheduledTime = new System.DateTime(2015, 09, 14, 09, 34, 01),
-                ServiceMethodName = "Insert2IdenticalTimes",
+                ServiceClassName = "Insert2IdenticalTimes",
             };
             var unexpected = new ExecutionDateTime()
             {
                 ScheduledTime = new System.DateTime(2015, 09, 14, 09, 34, 01),
-                ServiceMethodName = "Insert2IdenticalTimes"
+                ServiceClassName = "Insert2IdenticalTimes"
             };
 
             objectUnderTest.InsertExecutionTimes(new[] { expected, unexpected });
 
-            var actual = objectUnderTest.ExecutionTimes.Where(x => x.ServiceMethodName == expected.ServiceMethodName).Single();
+            var actual = objectUnderTest.ExecutionTimes.Where(x => x.ServiceClassName == expected.ServiceClassName).Single();
 
             Assert.AreEqual(expected, actual);
         }
@@ -94,18 +94,18 @@ namespace ServiceSchedulerTests.tests.ConfigProviderTests
             var expected = new ExecutionDateTime()
             {
                 ScheduledTime = new System.DateTime(2015, 09, 14, 09, 34, 01),
-                ServiceMethodName = "Insert2IdenticalTimes",
+                ServiceClassName = "Insert2IdenticalTimes",
             };
             var expectedWithStop = new ExecutionDateTime()
             {
                 ScheduledTime = new System.DateTime(2015, 09, 14, 09, 34, 01),
-                ServiceMethodName = "Insert2IdenticalTimes",
+                ServiceClassName = "Insert2IdenticalTimes",
                 IsStop = true,
             };
 
             objectUnderTest.InsertExecutionTimes(new[] { expected, expectedWithStop });
 
-            var actual = objectUnderTest.ExecutionTimes.Where(x => x.ServiceMethodName == expected.ServiceMethodName).Single();
+            var actual = objectUnderTest.ExecutionTimes.Where(x => x.ServiceClassName == expected.ServiceClassName).Single();
 
             Assert.AreEqual(expectedWithStop, actual, "Expected time with Stop flag missing");
         }

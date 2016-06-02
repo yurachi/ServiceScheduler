@@ -25,7 +25,7 @@ namespace ServiceScheduler
                 IsStop = sourceTime.IsStop,
 				Remove = sourceTime.Remove,
 				ScheduledTime = parsedDateTime,
-                ServiceMethodName = sourceTime.ServiceMethodName,
+                ServiceClassName = sourceTime.ServiceClassName,
 			};
 			return scheduled;
 		}

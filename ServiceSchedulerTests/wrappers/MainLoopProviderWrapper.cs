@@ -1,12 +1,14 @@
 ﻿using ServiceScheduler;
+using ServiceScheduler.interfaces;
+using ServiceScheduler.providers;
 using ServiceSchedulerTests.mocks;
 using System;
 
 namespace ServiceSchedulerTests.wrappers
 {
-    public class ServiceCallerWrapper : ServiceCaller
+    public class MainLoopProviderWrapper : MainLoopProvider
     {
-        public ServiceCallerWrapper(IConfigProvider configProvider) : base (configProvider)
+        public MainLoopProviderWrapper(IConfigProvider configProvider, IWorkerProvider workerProvider) : base (configProvider, workerProvider)
         {
             var factory = new BoolPropertyMockFactory();
             factory.SetReturnValues(true, false);

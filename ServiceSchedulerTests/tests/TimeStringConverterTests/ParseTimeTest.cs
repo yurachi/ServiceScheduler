@@ -44,9 +44,9 @@ namespace ServiceSchedulerTests
             Assert.AreEqual(expected, actual);
         }
 
-        [TestCase(2015, 9, 21, 0, 0, null, "Monday")] //day before now; scheduling for the next week
-        [TestCase(2015, 9, 15, 0, 0, null, "Tuesday")] //day matches now
-        [TestCase(2015, 9, 16, 0, 0, null, "Wednesday")]
+        [TestCase(2015, 9, 21, 0, 0, "08:00", "Monday")] //day before now; scheduling for the next week
+        [TestCase(2015, 9, 15, 0, 0, "10:15", "Tuesday")] //day matches now
+        [TestCase(2015, 9, 16, 0, 0, "06:01", "Wednesday")]
         public void ParseValidStopTimeWithoutTime(int expectedYear, int expectedMonth, int expectedDay, int expectedHour, int expectedMinute, string dateTime, string dayOfWeek)
         {
             var now = new DateTime(2015, 9, 15, 9, 34, 59);
